@@ -1,0 +1,108 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|c:\\users\\rgala\\source\\repos\\homeworkoutwebapp25\\homeworkoutwebapp25\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|solutionrelative:homeworkoutwebapp25\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|c:\\users\\rgala\\source\\repos\\homeworkoutwebapp25\\homeworkoutwebapp25\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|solutionrelative:homeworkoutwebapp25\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|c:\\users\\rgala\\source\\repos\\homeworkoutwebapp25\\homeworkoutwebapp25\\controllers\\exercisescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|solutionrelative:homeworkoutwebapp25\\controllers\\exercisescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|c:\\users\\rgala\\source\\repos\\homeworkoutwebapp25\\homeworkoutwebapp25\\controllers\\bodypartscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|solutionrelative:homeworkoutwebapp25\\controllers\\bodypartscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 692,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ExercisesController.cs",
+              "DocumentMoniker": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\Controllers\\ExercisesController.cs",
+              "RelativeDocumentMoniker": "HomeWorkoutWebApp25\\Controllers\\ExercisesController.cs",
+              "ToolTip": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\Controllers\\ExercisesController.cs",
+              "RelativeToolTip": "HomeWorkoutWebApp25\\Controllers\\ExercisesController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-13T10:03:12.791Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BodyPartsController.cs",
+              "DocumentMoniker": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\Controllers\\BodyPartsController.cs",
+              "RelativeDocumentMoniker": "HomeWorkoutWebApp25\\Controllers\\BodyPartsController.cs",
+              "ToolTip": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\Controllers\\BodyPartsController.cs",
+              "RelativeToolTip": "HomeWorkoutWebApp25\\Controllers\\BodyPartsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-13T10:03:11.657Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\appsettings.json",
+              "RelativeDocumentMoniker": "HomeWorkoutWebApp25\\appsettings.json",
+              "ToolTip": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\appsettings.json",
+              "RelativeToolTip": "HomeWorkoutWebApp25\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-07-13T08:36:25.622Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\Program.cs",
+              "RelativeDocumentMoniker": "HomeWorkoutWebApp25\\Program.cs",
+              "ToolTip": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\Program.cs",
+              "RelativeToolTip": "HomeWorkoutWebApp25\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAADIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-13T08:36:15.712Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 496,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

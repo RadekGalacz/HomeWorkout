@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAANd8kwUrAWUisXRO1Quig9AAAAAACAAAAAAAQZgAAAAEAACAAAAAjLjhFB6T8yGhTi5a1TxlGldSzZtAWLR8D5JYMP1VevwAAAAAOgAAAAAIAACAAAADqx3cHgBJaIaDaZG9BK1znXhp2chOk5HSHykm0+VzhKIAAAAASSsmFUZeKm/WLH+rhzD+OsnMCS0TQlTTeJEgR8PUMcPjQ/BUaiu/LgmHSbdbPfARgw4vtRdwToOfDSFDpd5fFNLak8iWptuIBtHhoyJJVIyeqRxO/e6B0IKSZNfdCpFKdns8tHXUR8aMI9lkseN1CTwysBJup1Ugwdsbz4cRbzEAAAABj2YPyWoULCISAHTV4sK2NnBYD2jgcQQX7DIadWQOdUqZfMA/yrmvy1zhgT924w7Xnk/bHbQVQrrei5i6otqEl</EncryptedPassword>
+    <History>False|2025-07-09T03:20:12.0154539Z||;True|2025-07-06T09:44:30.7442526+02:00||;True|2025-07-06T09:41:53.5820839+02:00||;True|2025-07-06T09:23:52.7100616+02:00||;True|2025-07-05T17:10:26.0322107+02:00||;True|2025-07-05T15:34:49.9277180+02:00||;True|2025-07-05T15:33:37.3804250+02:00||;True|2025-07-05T15:22:45.8980996+02:00||;True|2025-07-05T15:20:53.4759102+02:00||;True|2025-07-05T14:53:59.0034537+02:00||;True|2025-07-04T12:27:51.8668666+02:00||;True|2025-07-04T12:23:50.5159619+02:00||;True|2025-07-04T12:22:11.2000635+02:00||;True|2025-07-04T12:10:45.9177018+02:00||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="AzureDbConnection">
+      <Value>Data Source=%28localdb%29\MSSQLLocalDB%3bInitial Catalog=HomeWorkoutWebApp25%3bMultipleActiveResultSets=true</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>
