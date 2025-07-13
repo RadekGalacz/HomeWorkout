@@ -18,7 +18,6 @@ export default function Login({ onLoginSuccess, baseUrl }) {
                 { withCredentials: true }
             );
 
-            alert(res.data.message);
             onLoginSuccess?.(res.data.user);
         } catch (err) {
             alert("❌ " + (err.response?.data?.message || "Chyba při přihlášení."));

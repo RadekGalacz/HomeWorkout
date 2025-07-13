@@ -20,12 +20,13 @@ function UserAdmin({users, newUser, setNewUser, insertUser, deleteUser, handleUp
   // vstup do režimu úprav
   const enterEdit = u => {
     setEditEntryId(u.id);
-    setEditData({
+    const updated = {
       Name: u.userName,
       Email: u.email,
       Password: ''
-    });
-     setValidEdit(updated.Name.trim() && updated.Email.trim() && updated.Password.trim());
+    };
+    setEditData(updated);
+    setValidEdit(updated.Name.trim() && updated.Email.trim() && updated.Password.trim());
   };
 
   // změny v poli editace
@@ -152,7 +153,7 @@ function UserAdmin({users, newUser, setNewUser, insertUser, deleteUser, handleUp
                 {/* Editace */}
                 <td className="text-center">
                   {editEntryId === u.id ? (
-                    <>
+                    <div className="d-flex flex-row justify-content-center">
                       <button
                         className="btn btn-outline-success btn-sm me-2"
                         onClick={() => saveEdit(u.id)}
@@ -164,7 +165,7 @@ function UserAdmin({users, newUser, setNewUser, insertUser, deleteUser, handleUp
                       <button className="btn btn-outline-secondary btn-sm" onClick={() => setEditEntryId(null)} title="Zrušit editaci">
                         ❌
                       </button>
-                    </>
+                    </div>
                   ) : ['Admin', 'Host'].includes(u.userName) ? (
                     <button className="btn btn-outline-secondary btn-sm" disabled>
                       <i className="bi bi-lock-fill"></i> 🔒
@@ -179,7 +180,7 @@ function UserAdmin({users, newUser, setNewUser, insertUser, deleteUser, handleUp
                 {/* Mazání */}
                 <td className="text-center">
                   {confirmDeleteId === u.id ? (
-                    <>
+                    <div className="d-flex flex-row justify-content-center">
                       <button
                         onClick={() => userDeleteConfirm(u.id)}
                         className="btn btn-outline-danger btn-sm me-2"
@@ -190,7 +191,7 @@ function UserAdmin({users, newUser, setNewUser, insertUser, deleteUser, handleUp
                       <button onClick={() => setConfirmDeleteId(null)} className="btn btn-outline-secondary btn-sm" title="Zrušit">
                         ❌
                       </button>
-                    </>
+                    </div>
                   ) : ['Admin', 'Host'].includes(u.userName) ? (
                     <button className="btn btn-outline-danger btn-sm" disabled>
                       <i className="bi bi-lock-fill"></i> 🔒

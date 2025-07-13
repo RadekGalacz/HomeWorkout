@@ -7,16 +7,8 @@
       "RelativeMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|solutionrelative:homeworkoutwebapp25\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|c:\\users\\rgala\\source\\repos\\homeworkoutwebapp25\\homeworkoutwebapp25\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|solutionrelative:homeworkoutwebapp25\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|c:\\users\\rgala\\source\\repos\\homeworkoutwebapp25\\homeworkoutwebapp25\\controllers\\exercisescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|solutionrelative:homeworkoutwebapp25\\controllers\\exercisescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|c:\\users\\rgala\\source\\repos\\homeworkoutwebapp25\\homeworkoutwebapp25\\controllers\\bodypartscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|solutionrelative:homeworkoutwebapp25\\controllers\\bodypartscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|c:\\users\\rgala\\source\\repos\\homeworkoutwebapp25\\homeworkoutwebapp25\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{295CA7BF-135C-4321-B742-1F7EA071064E}|HomeWorkoutWebApp25\\HomeWorkoutWebApp25.csproj|solutionrelative:homeworkoutwebapp25\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 692,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -42,42 +34,6 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ExercisesController.cs",
-              "DocumentMoniker": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\Controllers\\ExercisesController.cs",
-              "RelativeDocumentMoniker": "HomeWorkoutWebApp25\\Controllers\\ExercisesController.cs",
-              "ToolTip": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\Controllers\\ExercisesController.cs",
-              "RelativeToolTip": "HomeWorkoutWebApp25\\Controllers\\ExercisesController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T10:03:12.791Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "BodyPartsController.cs",
-              "DocumentMoniker": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\Controllers\\BodyPartsController.cs",
-              "RelativeDocumentMoniker": "HomeWorkoutWebApp25\\Controllers\\BodyPartsController.cs",
-              "ToolTip": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\Controllers\\BodyPartsController.cs",
-              "RelativeToolTip": "HomeWorkoutWebApp25\\Controllers\\BodyPartsController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T10:03:11.657Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\appsettings.json",
-              "RelativeDocumentMoniker": "HomeWorkoutWebApp25\\appsettings.json",
-              "ToolTip": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\appsettings.json",
-              "RelativeToolTip": "HomeWorkoutWebApp25\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-07-13T08:36:25.622Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\Program.cs",
@@ -86,7 +42,20 @@
               "RelativeToolTip": "HomeWorkoutWebApp25\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T08:36:15.712Z",
+              "WhenOpened": "2025-07-13T13:15:08.457Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "HomeWorkoutWebApp25\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\rgala\\source\\repos\\HomeWorkoutWebApp25\\HomeWorkoutWebApp25\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "HomeWorkoutWebApp25\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAwBgAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-13T13:02:17.955Z",
               "EditorCaption": ""
             }
           ]

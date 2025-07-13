@@ -78,7 +78,7 @@ namespace HomeWorkoutWebApp25.Controllers {
         }
 
         // EDITACE (PUT – uložení změn)
-        [HttpPut("{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Edit(string id, [FromBody] UserVM vm) {
             var user = await userManager.FindByIdAsync(id);
             if (user == null)
@@ -87,8 +87,16 @@ namespace HomeWorkoutWebApp25.Controllers {
             if (_protectedUsers.Contains(user.UserName))
                 return BadRequest(new { message = $"Uživatel '{user.UserName}' je chráněn a nelze jej upravit." });
 
-            if (string.IsNullOrWhiteSpace(vm.Email) && string.IsNullOrWhiteSpace(vm.Password))
-                return BadRequest(new { message = "E-mail nebo heslo musí být vyplněno." });
+            // Přidáno: Aktualizace jména uživatele
+            if (!string.IsNullOrWhiteSpace(vm.Name) && user.UserName != vm.Name) {
+                var userNameResult = await userManager.SetUserNameAsync(user, vm.Name);
+                if (!userNameResult.Succeeded) {
+                    return BadRequest(new {
+                        message = "Chyba při aktualizaci uživatelského jména",
+                        errors = userNameResult.Errors.Select(e => e.Description)
+                    });
+                }
+            }
 
             if (!string.IsNullOrWhiteSpace(vm.Email))
                 user.Email = vm.Email;

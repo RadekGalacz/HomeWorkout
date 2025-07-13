@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HomeWorkoutWebApp25")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fcb3a65c98e51b910b0b4a57a6821b2226db9319")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c6a4af58573799c6f497f6f849e3a6a66eca5ee8")]
 [assembly: System.Reflection.AssemblyProductAttribute("HomeWorkoutWebApp25")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HomeWorkoutWebApp25")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -8,7 +8,6 @@ using System.Security.Claims;
 
 namespace HomeWorkoutWebApp25.Controllers;
 
-// Controller pro správu uživatelů
 [ApiController]
 [Route("[controller]")]
 public class AccountController : ControllerBase {
@@ -20,8 +19,16 @@ public class AccountController : ControllerBase {
         this.signInManager = signInManager;
     }
 
+    // GET: /account/login
+    // Zobrazí přihlašovací stránku
+    [HttpGet("login")]
+    [AllowAnonymous]
+    public IActionResult LoginGet() {
+        return Ok(new { message = "Prosím přihlašte se." });
+    }
+
     // POST: /account/login
-    // Přihlášení
+    // Přihlašuje uživatele
     [HttpPost("login")]
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginVM login) {
@@ -50,7 +57,7 @@ public class AccountController : ControllerBase {
     }
 
     // POST: /account/logout
-    // Odhlášení
+    // Odhlášení uživatele
     [HttpPost("logout")]
     [Authorize]
     public async Task<IActionResult> Logout() {
@@ -59,7 +66,7 @@ public class AccountController : ControllerBase {
     }
 
     // GET: /account/userinfo
-    // Info o přihlášeném uživateli
+    // Zobrazí informace o přihlášeném uživateli
     [HttpGet("userinfo")]
     [Authorize]
     public async Task<IActionResult> UserInfo() {
@@ -69,7 +76,6 @@ public class AccountController : ControllerBase {
             return Unauthorized(new { message = "Uživatel není přihlášen." });
 
         var user = await userManager.FindByNameAsync(userName);
-
         if (user == null)
             return Unauthorized(new { message = "Uživatel nenalezen v databázi, i když je přihlášen." });
 

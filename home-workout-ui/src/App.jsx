@@ -30,7 +30,8 @@ function AppContent() {
   const [showHelp, setShowHelp] = useState(() => localStorage.getItem('hasSeenWelcomeModal') !== 'true');
 
   const navigate = useNavigate();
-  const baseUrl = 'https://homeworkoutwebapp.runasp.net/' || 'https://localhost:44341/';
+  const baseUrl1 = 'https://localhost:44341/';
+  const baseUrl = 'https://homeworkoutwebapp.runasp.net/';
 
   // Výchozí stavy entit
   const [newBodyPart, setNewBodyPart] = useState({BodyPartName: ''});
@@ -43,11 +44,12 @@ function AppContent() {
   // Zpracování chyb Axios
   const handleError = error => {
     const msg = error.response?.data?.errors
-      ? Object.values(error.response.data.errors)[0][0]
+      ? Object.values(error.response.data.errors)[0]
       : error.response?.data?.message || error.message || 'Neznámá chyba';
 
     if (error.response?.status === 404 && error.config.url.includes('AccessDenied')) return;
     if (error.response?.status === 405 && error.config.url.includes('Account/Login')) return;
+    alert(`Chyba: ${msg}`);
     console.error(`Chyba: ${msg}`);
   };
 
@@ -195,30 +197,35 @@ function AppContent() {
 
   return (
     <div className="bg-light min-vh-100 py-4">
-      <WelcomeModal isOpen={showHelp} onClose={closeWelcomeModal} />
-      <header className="container my-4">
-        <div className="p-3 bg-white rounded shadow text-center">
-          <h1 className="h3 fw-bold text-success mb-2">
-            💪 <span className="text-primary">HomeWorkout</span>
-          </h1>
-          <p className="small text-muted mb-3">Aplikace pro správu cviků a plánů.</p>
-          <nav>
+  <WelcomeModal isOpen={showHelp} onClose={closeWelcomeModal} />
+  <header className="container my-4">
+    <div className="p-3 bg-white rounded shadow text-center">
+      <h1 className="h3 fw-bold text-success mb-2">
+        💪 <span className="text-primary">HomeWorkout</span>
+      </h1>
+      <p className="small text-muted mb-3">Aplikace pro správu cviků a plánů.</p>
+      <nav className="d-flex flex-wrap justify-content-center gap-2 p-2">
+        <div className="d-flex justify-content-center">
+          <div className="d-flex flex-wrap justify-content-center align-items-center bg-light border rounded shadow-sm p-2 gap-2">
+            {/* Sekce pro přihlášené uživatele */}
             {user && (
               <>
-                <NavLink to="/" className={({isActive}) => `btn btn-sm mx-1 shadow-sm ${isActive ? 'btn-primary' : 'btn-success'}`}>
+                <NavLink to="/" className={({isActive}) => `btn btn-sm shadow-sm ${isActive ? 'btn-primary' : 'btn-success'}`}>
                   🏠 Domů
                 </NavLink>
+
                 {role === 'admin' && (
                   <>
                     <NavLink
                       to="/edit"
-                      className={({isActive}) => `btn btn-sm mx-1 shadow-sm ${isActive ? 'btn-primary' : 'btn-outline-secondary'}`}
+                      className={({isActive}) => `btn btn-sm shadow-sm ${isActive ? 'btn-primary' : 'btn-outline-secondary'}`}
                     >
                       ✍️ Editace cviků
                     </NavLink>
+
                     <NavLink
                       to="/admin"
-                      className={({isActive}) => `btn btn-sm mx-1 shadow-sm ${isActive ? 'btn-primary' : 'btn-outline-secondary'}`}
+                      className={({isActive}) => `btn btn-sm shadow-sm ${isActive ? 'btn-primary' : 'btn-outline-secondary'}`}
                     >
                       🛡️ Admin
                     </NavLink>
@@ -226,22 +233,31 @@ function AppContent() {
                 )}
               </>
             )}
-            <button className="btn btn-outline-info btn-sm mx-1 shadow-sm" onClick={() => setShowHelp(true)} title="Nápověda">
+
+            {/* Tlačítko Nápověda je viditelné pro všechny, v rámci panelu */}
+            <button className="btn btn-outline-info btn-sm shadow-sm" onClick={() => setShowHelp(true)} title="Nápověda">
               ❓ Nápověda
             </button>
-          </nav>
-          {user && (
-            <div className="d-flex justify-content-center align-items-center flex-wrap gap-2 mb-3 mt-3">
-              <span className="badge bg-success px-3 py-2 shadow-sm d-flex align-items-center gap-2">
-                <i className="bi bi-person-circle"></i> {user} ({role})
-              </span>
-              <button className="btn btn-sm btn-outline-danger shadow-sm" onClick={handleLogout} title="Odhlásit se">
-                🚪 Odhlásit
-              </button>
-            </div>
-          )}
+          </div>
         </div>
-      </header>
+      </nav>
+      
+      {user && (
+        <div className="d-flex justify-content-center mb-3 mt-3">
+          <div className="d-flex align-items-center bg-secondary text-white shadow-sm rounded px-3 py-2">
+            <i className="bi bi-person-circle me-2"></i>
+            <span className="me-3">
+              {user} ({role})
+            </span>
+            <button className="btn btn-sm btn-light text-danger border-0 px-2 py-1" onClick={handleLogout} title="Odhlásit se">
+              🔓
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  </header>
+
 
       <Routes>
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login baseUrl={baseUrl} onLoginSuccess={handleLogin} />} />

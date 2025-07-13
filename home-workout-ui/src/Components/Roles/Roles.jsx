@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import axios from 'axios'; // Import axios pro volání API uvnitř komponenty
 
-function Roles({ roles, newRole, setNewRole, insertRole, deleteRole, users, handleUpdateRoleMembers, baseUrl }) {
+function Roles({roles, newRole, setNewRole, insertRole, deleteRole, users, handleUpdateRoleMembers, baseUrl}) {
   const [confirmDeleteId, setConfirmDeleteId] = useState(null); // ID role, která čeká na potvrzení smazání
   const [showMembersModal, setShowMembersModal] = useState(false);
   const [selectedRoleForMembers, setSelectedRoleForMembers] = useState(null);
@@ -21,7 +21,7 @@ function Roles({ roles, newRole, setNewRole, insertRole, deleteRole, users, hand
     try {
       // Načteme detaily role včetně členů a nečlenů z backendu
       const response = await axios.get(`${baseUrl}Roles/${role.id}`);
-      const { members, nonMembers } = response.data;
+      const {members, nonMembers} = response.data;
       setModalMembers(members);
       setModalNonMembers(nonMembers);
       setShowMembersModal(true);
@@ -73,8 +73,8 @@ function Roles({ roles, newRole, setNewRole, insertRole, deleteRole, users, hand
           <thead className="table-dark text-center">
             <tr>
               <th>Název role</th>
-              <th style={{ width: '120px' }}>Spravovat uživatele</th>
-              <th style={{ width: '120px' }}>Smazat</th>
+              <th style={{width: '120px'}}>Spravovat uživatele</th>
+              <th style={{width: '120px'}}>Smazat</th>
             </tr>
           </thead>
 
@@ -86,7 +86,7 @@ function Roles({ roles, newRole, setNewRole, insertRole, deleteRole, users, hand
                   type="text"
                   className="form-control form-control-sm rounded-3"
                   value={newRole.RoleName}
-                  onChange={e => setNewRole({ ...newRole, RoleName: e.target.value })}
+                  onChange={e => setNewRole({...newRole, RoleName: e.target.value})}
                   placeholder="Název role"
                 />
               </td>
@@ -112,7 +112,7 @@ function Roles({ roles, newRole, setNewRole, insertRole, deleteRole, users, hand
                 {/* Mazání role */}
                 <td className="text-center">
                   {confirmDeleteId === r.id ? (
-                    <>
+                    <div className="d-flex justify-content-center">
                       <button
                         onClick={() => roleDeleteConfirm(r.id)}
                         className="btn btn-outline-danger btn-sm me-2"
@@ -123,7 +123,7 @@ function Roles({ roles, newRole, setNewRole, insertRole, deleteRole, users, hand
                       <button onClick={() => setConfirmDeleteId(null)} className="btn btn-outline-secondary btn-sm" title="Zrušit">
                         ❌
                       </button>
-                    </>
+                    </div>
                   ) : r.name === 'Admin' || r.name === 'Host' ? (
                     // Pro roli Admin zamkni možnost smazání
                     <button className="btn btn-outline-danger btn-sm" disabled>
@@ -143,7 +143,7 @@ function Roles({ roles, newRole, setNewRole, insertRole, deleteRole, users, hand
 
       {/* Modální okno pro správu členů role */}
       {showMembersModal && selectedRoleForMembers && (
-        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="modal d-block" tabIndex="-1" style={{backgroundColor: 'rgba(0,0,0,0.5)'}}>
           <div className="modal-dialog modal-lg modal-dialog-centered">
             <div className="modal-content rounded-4 shadow">
               <div className="modal-header bg-primary text-white rounded-top-4">
@@ -154,14 +154,14 @@ function Roles({ roles, newRole, setNewRole, insertRole, deleteRole, users, hand
                 <div className="row">
                   <div className="col-md-6">
                     <h6>Členové role</h6>
-                    <ul className="list-group mb-3" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                    <ul className="list-group mb-3" style={{maxHeight: '300px', overflowY: 'auto'}}>
                       {modalMembers.length === 0 ? (
                         <li className="list-group-item text-muted">Žádní členové</li>
                       ) : (
                         modalMembers.map(user => (
                           <li key={user.id} className="list-group-item d-flex justify-content-between align-items-center">
                             <span>{user.userName}</span> {/* Zobrazí jméno uživatele */}
-                            {user.userName === 'Admin' ||user.userName === 'Host'? (
+                            {user.userName === 'Admin' || user.userName === 'Host' ? (
                               <button disabled className="btn btn-outline-danger btn-sm" title="Admin nemůže být odebrán">
                                 🔒
                               </button>
@@ -177,14 +177,14 @@ function Roles({ roles, newRole, setNewRole, insertRole, deleteRole, users, hand
                   </div>
                   <div className="col-md-6">
                     <h6>Ostatní uživatelé</h6>
-                    <ul className="list-group mb-3" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                    <ul className="list-group mb-3" style={{maxHeight: '300px', overflowY: 'auto'}}>
                       {modalNonMembers.length === 0 ? (
                         <li className="list-group-item text-muted">Všichni uživatelé jsou členy</li>
                       ) : (
                         modalNonMembers.map(user => (
                           <li key={user.id} className="list-group-item d-flex justify-content-between align-items-center">
                             {user.userName}
-                            {user.userName === 'Admin' ||user.userName === 'Host' ? (
+                            {user.userName === 'Admin' || user.userName === 'Host' ? (
                               <button disabled className="btn btn-outline-success btn-sm" title="Admin nemůže být přidán">
                                 🔒
                               </button>
