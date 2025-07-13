@@ -5,7 +5,7 @@
 <img src="screenshots/screenshot2.png" width="200"/>
 <img src="screenshots/screenshot3.png" width="200"/>
 <img src="screenshots/screenshot4.png" width="200"/>
-</p>p
+</p>
 
 Tato mnou vytvořená aplikace slouží k vytváření, správě a optimalizaci denních cvičebních plánů. Uživatelé mohou přidávat cviky, označovat je jako "odcvičené" nebo je mazat. Aplikace má také administrační sekci pro správu cvičených partií a cviků, s možností role-based přístupu pro správu uživatelů a jejich práv.
 
