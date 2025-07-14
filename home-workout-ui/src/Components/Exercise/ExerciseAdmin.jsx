@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Select from 'react-select';
 
 function ExerciseAdmin({newExercise, setNew, insertExercise, dataParts, dataExercises, handleDelete, handleUpdate}) {
+  const [isValid, setIsValid] = useState(false);
   const [editEntryId, setEditEntryId] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [editData, setEditData] = useState({
@@ -12,6 +13,15 @@ function ExerciseAdmin({newExercise, setNew, insertExercise, dataParts, dataExer
   });
 
   const [stars] = useState(['⭐', '⭐⭐', '⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐⭐⭐']);
+
+  useEffect(() => {
+    const valid =
+      newExercise.ExerciseName.trim() !== '' &&
+      newExercise.ExerciseDescription.trim() !== '' &&
+      newExercise.Difficulty !== '' &&
+      newExercise.BodyPartId != null;
+    setIsValid(valid);
+  }, [newExercise]);
 
   // Select - options do selectu
   const options = dataParts.map(bodyPart => ({
@@ -67,13 +77,6 @@ function ExerciseAdmin({newExercise, setNew, insertExercise, dataParts, dataExer
     setNew(updated);
   };
 
-  // Validace nového cviku
-  const isNewValid =
-    newExercise.ExerciseName.trim() !== '' &&
-    newExercise.ExerciseDescription.trim() !== '' &&
-    newExercise.Difficulty !== '' &&
-    newExercise.BodyPartId != null;
-
   // Odeslání nového cviku
   const handleNewSubmit = e => {
     e.preventDefault();
@@ -105,7 +108,7 @@ function ExerciseAdmin({newExercise, setNew, insertExercise, dataParts, dataExer
           <tbody>
             {/* Formulář přidání nového cviku jako první řádek tabulky */}
             <tr>
-              <td>
+              <td className="bg-secondary-subtle">
                 <Select
                   options={options}
                   isSearchable
@@ -114,7 +117,7 @@ function ExerciseAdmin({newExercise, setNew, insertExercise, dataParts, dataExer
                   classNamePrefix="react-select"
                 />
               </td>
-              <td>
+              <td className="bg-secondary-subtle">
                 <input
                   type="text"
                   name="ExerciseName"
@@ -124,7 +127,7 @@ function ExerciseAdmin({newExercise, setNew, insertExercise, dataParts, dataExer
                   placeholder="Např. Kliky"
                 />
               </td>
-              <td>
+              <td className="bg-secondary-subtle">
                 <input
                   type="text"
                   name="ExerciseDescription"
@@ -134,7 +137,7 @@ function ExerciseAdmin({newExercise, setNew, insertExercise, dataParts, dataExer
                   placeholder="Např. Prsní svaly, tricepsy"
                 />
               </td>
-              <td className="text-center">
+              <td className="text-center bg-secondary-subtle">
                 <select
                   name="Difficulty"
                   value={newExercise.Difficulty}
@@ -149,8 +152,8 @@ function ExerciseAdmin({newExercise, setNew, insertExercise, dataParts, dataExer
                   <option value="5">⭐⭐⭐⭐⭐</option>
                 </select>
               </td>
-              <td colSpan="2" className="text-center">
-                <button className="btn btn-outline-success btn-sm" onClick={handleNewSubmit} disabled={!isNewValid}>
+              <td colSpan="2" className="text-center bg-secondary-subtle">
+                <button className="btn btn-outline-success btn-sm" onClick={handleNewSubmit} disabled={!isValid}>
                   Přidat
                 </button>
               </td>
@@ -187,7 +190,7 @@ function ExerciseAdmin({newExercise, setNew, insertExercise, dataParts, dataExer
                     dataParts.find(bp => bp.id === item.bodyPartId)?.bodyPartName || 'Neznámá partie'
                   )}
                 </td>
-                <td className="align-middle">
+                <td className="align-middle ">
                   {editEntryId === item.id ? (
                     <input
                       type="text"

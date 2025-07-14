@@ -155,23 +155,26 @@ function WorkoutPlan({
       {/* Formulář pro vytvoření nového plánu */}
       <WorkoutPlanForm newWorkoutPlan={newWorkoutPlan} setNewWorkoutPlan={setNewWorkoutPlan} insertWorkoutPlan={insertWorkoutPlan} />
 
-      <div className="row align-items-start g-3">
-        <div className="col-12 d-flex align-items-center gap-2 mb-2 flex-nowrap">
-          <span className="border border-primary rounded px-3 py-2 bg-white flex-shrink-0">Filtr cviků:</span>
+<div className="row align-items-start g-3">
+  <div className="col-12">
+    <div className="d-flex align-items-center gap-2 mb-2 flex-nowrap border border-primary-subtle rounded px-3 py-2 bg-white filter-wrapper">
+      <span className="flex-shrink-0">Filtr cviků:</span>
 
-          {/* Výběr partie pro filtrování */}
-          <div className="flex-grow-1">
-            <Select
-              options={checkedOptions}
-              value={checkedOptions.find(opt => opt.value === checkedFilter) || null}
-              onChange={opt => setCheckedFilter(opt?.value ?? null)}
-              classNamePrefix="react-select"
-              isClearable
-              placeholder="Filtrovat podle stavu..."
-            />
-          </div>
-        </div>
+      {/* Výběr partie pro filtrování */}
+      <div className="flex-grow-1">
+        <Select
+          options={checkedOptions}
+          value={checkedOptions.find(opt => opt.value === checkedFilter) || null}
+          onChange={opt => setCheckedFilter(opt?.value ?? null)}
+          classNamePrefix="react-select"
+          isClearable
+          placeholder="Filtrovat podle stavu..."
+        />
       </div>
+    </div>
+  </div>
+</div>
+
 
       {/* Karty všech tréninkových plánů */}
       <div className="row row-cols-1 row-cols-lg-3 g-3">

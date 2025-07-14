@@ -11,6 +11,7 @@ builder.Services.AddControllers();
 //builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //  options.UseSqlServer(builder.Configuration.GetConnectionString("HomeWorkoutDbConntection")));
 
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

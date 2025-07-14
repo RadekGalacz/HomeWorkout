@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios'; // Import axios pro volání API uvnitř komponenty
 
 function Roles({roles, newRole, setNewRole, insertRole, deleteRole, users, handleUpdateRoleMembers, baseUrl}) {
@@ -7,6 +7,12 @@ function Roles({roles, newRole, setNewRole, insertRole, deleteRole, users, handl
   const [selectedRoleForMembers, setSelectedRoleForMembers] = useState(null);
   const [modalMembers, setModalMembers] = useState([]); // Uživatelé aktuálně v této roli
   const [modalNonMembers, setModalNonMembers] = useState([]); // Uživatelé, kteří nejsou v této roli
+  const [validNewRole, setValidNewRole] = useState(false) // Validace pro přidání nové role
+
+    useEffect(() => {
+      const isValid = newRole.RoleName.trim() !== '';
+      setValidNewRole(isValid);
+    }, [newRole]);
 
   // smazání role
   const roleDeleteConfirm = id => {
@@ -31,7 +37,7 @@ function Roles({roles, newRole, setNewRole, insertRole, deleteRole, users, handl
     }
   };
 
-  // NOVÁ FUNKCE: Přesun uživatele mezi seznamy členů/nečlenů
+  // Přesun uživatele mezi seznamy členů/nečlenů
   const handleToggleMember = (user, isMember) => {
     if (isMember) {
       // Odebrat z členů, přidat do nečlenů
@@ -44,11 +50,9 @@ function Roles({roles, newRole, setNewRole, insertRole, deleteRole, users, handl
     }
   };
 
-  // NOVÁ FUNKCE: Uložení změn členů role
+  // Uložení změn členů role
   const saveMembersChanges = async () => {
     if (!selectedRoleForMembers) return;
-
-    const initialMembers = selectedRoleForMembers.members || []; // Pokud backend nevrací members přímo v GetAllRoles, budeme potřebovat plný seznam
 
     const originalMembersResponse = await axios.get(`${baseUrl}Roles/${selectedRoleForMembers.id}`);
     const originalMemberIds = originalMembersResponse.data.members.map(m => m.id);
@@ -81,7 +85,7 @@ function Roles({roles, newRole, setNewRole, insertRole, deleteRole, users, handl
           <tbody>
             {/* Řádek pro přidání nové role */}
             <tr>
-              <td>
+              <td className='bg-secondary-subtle'>
                 <input
                   type="text"
                   className="form-control form-control-sm rounded-3"
@@ -90,8 +94,8 @@ function Roles({roles, newRole, setNewRole, insertRole, deleteRole, users, handl
                   placeholder="Název role"
                 />
               </td>
-              <td colSpan={2} className="text-center">
-                <button className="btn btn-outline-success btn-sm" onClick={insertRole}>
+              <td colSpan={2} className="text-center bg-secondary-subtle">
+                <button className="btn btn-outline-success btn-sm" onClick={insertRole} disabled={!validNewRole}>
                   Přidat
                 </button>
               </td>

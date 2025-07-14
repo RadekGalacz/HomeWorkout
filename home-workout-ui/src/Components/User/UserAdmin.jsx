@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 function UserAdmin({users, newUser, setNewUser, insertUser, deleteUser, handleUpdateUser}) {
   const [confirmDeleteId, setConfirmDeleteId] = useState(null); // ID uživatele, který čeká na potvrzení smazání
@@ -9,6 +9,31 @@ function UserAdmin({users, newUser, setNewUser, insertUser, deleteUser, handleUp
     Password: ''
   });
   const [validEdit, setValidEdit] = useState(false); // validace formuláře editace
+  const [validNewUser, setValidNewUser] = useState(false); // validace pro přidáni nového usera
+
+  useEffect(() => {
+    if (!editEntryId) {
+      setValidEdit(false);
+      return;
+    }
+    const original = users.find(u => u.id === editEntryId);
+    if (!original) {
+      setValidEdit(false);
+      return;
+    }
+    const nameChanged = editData.Name !== original.userName;
+    const emailChanged = editData.Email !== original.email;
+    const passwordFilled = editData.Password.trim() !== '';
+
+    setValidEdit(nameChanged || emailChanged || passwordFilled);
+  }, [editData, editEntryId, users]);
+
+  useEffect(() => {
+    const {Name, Email, Password} = newUser;
+
+    // Validace „Přidat“, pokud jsou všechna pole vyplněna
+    setValidNewUser(Name.trim() !== '' && Email.trim() !== '' && Password.trim() !== '');
+  }, [newUser]);
 
   // smazání uživatele
   const userDeleteConfirm = id => {
@@ -20,33 +45,33 @@ function UserAdmin({users, newUser, setNewUser, insertUser, deleteUser, handleUp
   // vstup do režimu úprav
   const enterEdit = u => {
     setEditEntryId(u.id);
-    const updated = {
+    setEditData({
       Name: u.userName,
       Email: u.email,
       Password: ''
-    };
-    setEditData(updated);
-    setValidEdit(updated.Name.trim() && updated.Email.trim() && updated.Password.trim());
+    });
   };
 
   // změny v poli editace
   const handleEditChange = e => {
     const {name, value} = e.target;
-    const updated = {...editData, [name]: value};
-    setEditData(updated);
-    // základní validace: všechna pole musí být vyplněna
-    setValidEdit(updated.Name.trim() && updated.Email.trim() && updated.Password.trim());
+    setEditData(prev => ({...prev, [name]: value}));
   };
 
   // uložit úpravy
   const saveEdit = id => {
     if (!validEdit) return;
 
-    handleUpdateUser(id, {
+    const updatedUser = {
       Name: editData.Name,
-      Email: editData.Email,
-      Password: editData.Password
-    });
+      Email: editData.Email
+    };
+
+    if (editData.Password.trim() !== '') {
+      updatedUser.Password = editData.Password;
+    }
+
+    handleUpdateUser(id, updatedUser);
     setEditEntryId(null);
     setValidEdit(false);
   };
@@ -69,7 +94,7 @@ function UserAdmin({users, newUser, setNewUser, insertUser, deleteUser, handleUp
           <tbody>
             {/* Řádek pro přidání nového uživatele */}
             <tr>
-              <td>
+              <td className="bg-secondary-subtle">
                 <input
                   type="text"
                   className="form-control form-control-sm rounded-3"
@@ -78,7 +103,7 @@ function UserAdmin({users, newUser, setNewUser, insertUser, deleteUser, handleUp
                   placeholder="Jméno"
                 />
               </td>
-              <td>
+              <td className="bg-secondary-subtle">
                 <input
                   type="email"
                   className="form-control form-control-sm rounded-3"
@@ -87,7 +112,7 @@ function UserAdmin({users, newUser, setNewUser, insertUser, deleteUser, handleUp
                   placeholder="E‑mail"
                 />
               </td>
-              <td>
+              <td className="bg-secondary-subtle">
                 <input
                   type="password"
                   className="form-control form-control-sm rounded-3"
@@ -96,8 +121,8 @@ function UserAdmin({users, newUser, setNewUser, insertUser, deleteUser, handleUp
                   placeholder="Heslo"
                 />
               </td>
-              <td colSpan={2} className="text-center">
-                <button className="btn btn-outline-success btn-sm" onClick={insertUser}>
+              <td colSpan={2} className="text-center bg-secondary-subtle">
+                <button className="btn btn-outline-success btn-sm" onClick={insertUser} disabled={!validNewUser}>
                   Přidat
                 </button>
               </td>

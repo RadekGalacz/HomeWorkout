@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 function BodyPartAdmin({newBodyPart, setNewBodyPart, insertExerciseBodyPart, dataParts, handleDeleteBodyPart, handleUpdateBodyPart}) {
   // Lokální stav pro validaci, editaci a mazání
@@ -7,11 +7,14 @@ function BodyPartAdmin({newBodyPart, setNewBodyPart, insertExerciseBodyPart, dat
   const [editName, setEditName] = useState('');
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
+  useEffect(() => {
+  setValid(newBodyPart.BodyPartName.trim() !== '');
+}, [newBodyPart]);
+
   // Zpracování změny vstupního pole pro novou partii
   const handleChange = e => {
     const {value} = e.target;
-    setNewBodyPart({...newBodyPart, BodyPartName: value}); // aktualizace názvu partie
-    setValid(value.trim() !== ''); // validace, zda pole není prázdné
+    setNewBodyPart({ ...newBodyPart, BodyPartName: value }); // aktualizace názvu partie
   };
 
   // Odeslání formuláře pro přidání nové partie
@@ -19,7 +22,6 @@ function BodyPartAdmin({newBodyPart, setNewBodyPart, insertExerciseBodyPart, dat
     e.preventDefault();
     insertExerciseBodyPart(); // volání funkce pro přidání
     setNewBodyPart({BodyPartName: ''}); // reset vstupu
-    setValid(false); // reset validace
   };
 
   // Přepnutí do režimu úpravy dané položky
@@ -56,7 +58,7 @@ function BodyPartAdmin({newBodyPart, setNewBodyPart, insertExerciseBodyPart, dat
           <tbody>
             {/* Řádek pro přidání nové partie */}
             <tr>
-              <td>
+              <td className='bg-secondary-subtle'> 
                 <form onSubmit={handleSubmit}>
                   <input
                     type="text"
@@ -69,7 +71,7 @@ function BodyPartAdmin({newBodyPart, setNewBodyPart, insertExerciseBodyPart, dat
                   />
                 </form>
               </td>
-              <td colSpan={2} className="text-center">
+              <td colSpan={2} className="text-center bg-secondary-subtle">
                 <button className="btn btn-outline-success btn-sm" onClick={handleSubmit} disabled={!valid}>
                   Přidat
                 </button>
