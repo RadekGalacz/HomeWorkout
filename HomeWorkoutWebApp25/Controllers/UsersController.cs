@@ -1,11 +1,13 @@
 ﻿using HomeWorkoutWebApp25.Models;
 using HomeWorkoutWebApp25.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeWorkoutWebApp25.Controllers {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class UsersController : ControllerBase {
         private readonly UserManager<AppUser> userManager;
         private readonly List<string> _protectedUsers;

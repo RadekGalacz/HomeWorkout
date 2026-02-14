@@ -1,11 +1,13 @@
 ﻿using HomeWorkoutWebApp25.DTO;
 using HomeWorkoutWebApp25.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace HomeWorkoutWebApp25.Controllers {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class WorkoutExerciseController : ControllerBase {
         private readonly WorkoutExerciseService _workoutExerciseService;
 

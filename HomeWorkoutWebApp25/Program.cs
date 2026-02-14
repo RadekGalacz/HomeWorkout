@@ -11,7 +11,6 @@ builder.Services.AddControllers();
 //builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //  options.UseSqlServer(builder.Configuration.GetConnectionString("HomeWorkoutDbConntection")));
 
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -49,9 +48,6 @@ builder.Services.ConfigureApplicationCookie(options => {
     options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
     options.SlidingExpiration = true;
 });
-
-builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
-    .AddCookie();
 
 var app = builder.Build();
 

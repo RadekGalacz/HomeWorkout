@@ -7,6 +7,7 @@ namespace HomeWorkoutWebApp25.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class RolesController : ControllerBase {
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly UserManager<AppUser> _userManager;

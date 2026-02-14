@@ -4,10 +4,12 @@ using HomeWorkoutWebApp25.Models;
 using HomeWorkoutWebApp25.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HomeWorkoutWebApp25.Controllers {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class BodyPartsController : ControllerBase {
         private readonly BodyPartsService _bodyPartsService;
         private readonly IConfiguration _configuration;
