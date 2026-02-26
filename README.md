@@ -28,8 +28,7 @@ Tato mnou vytvořená aplikace slouží k vytváření, správě a optimalizaci 
 - **Axios**: Komunikace s API pro správu dat.
 - **Vite**: Vývoj a optimalizaci aplikace.
 - **ASP.NET Core Web API**: pro backend a API.
-- **Azure**: Hostování backendu.
-- **MonsterASP.NET**: Hostování MSSQL databáze.
+- **MonsterASP.NET**: Hostování FE, BE a MSSQL databáze.
 - **Osobní webové stránky**: Hosting frontendové části aplikace.
 
 ## 👥 Role-based přístup
