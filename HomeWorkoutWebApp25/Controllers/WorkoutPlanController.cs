@@ -8,9 +8,9 @@ namespace HomeWorkoutWebApp25.Controllers {
     [Route("[controller]")]
     [Authorize]
     public class WorkoutPlanController : ControllerBase {
-        private readonly WorkoutPlanService _workoutPlanService;
+        private readonly IWorkoutPlanService _workoutPlanService;
 
-        public WorkoutPlanController(WorkoutPlanService workoutPlanService) {
+        public WorkoutPlanController(IWorkoutPlanService workoutPlanService) {
             _workoutPlanService = workoutPlanService;
         }
 

@@ -1,161 +1,90 @@
-import React, {useState, useEffect} from 'react';
+/**
+ * BodyPartAdmin – CRUD tabulka svalových partií.
+ * Zamčené položky (LOCKED_BODY_PARTS) nelze editovat ani mazat.
+ */
+import { useState, useMemo } from 'react';
+import { LOCKED_BODY_PARTS } from '../../constants';
 
-function BodyPartAdmin({newBodyPart, setNewBodyPart, insertExerciseBodyPart, dataParts, handleDeleteBodyPart, handleUpdateBodyPart}) {
-  // Lokální stav pro validaci, editaci a mazání
-  const [valid, setValid] = useState(false);
+function BodyPartAdmin({ dataParts, onAdd, onUpdate, onDelete }) {
+  const [newName, setNewName] = useState('');
   const [editEntryId, setEditEntryId] = useState(null);
   const [editName, setEditName] = useState('');
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
-  useEffect(() => {
-  setValid(newBodyPart.BodyPartName.trim() !== '');
-}, [newBodyPart]);
+  const isValid = useMemo(() => newName.trim() !== '', [newName]);
+  const isLocked = (name) => LOCKED_BODY_PARTS.includes(name);
 
-  // Zpracování změny vstupního pole pro novou partii
-  const handleChange = e => {
-    const {value} = e.target;
-    setNewBodyPart({ ...newBodyPart, BodyPartName: value }); // aktualizace názvu partie
-  };
-
-  // Odeslání formuláře pro přidání nové partie
-  const handleSubmit = e => {
-    e.preventDefault();
-    insertExerciseBodyPart(); // volání funkce pro přidání
-    setNewBodyPart({BodyPartName: ''}); // reset vstupu
-  };
-
-  // Přepnutí do režimu úpravy dané položky
-  const enterEdit = item => {
-    setEditEntryId(item.id);
-    setEditName(item.bodyPartName);
-  };
-
-  // Uložení změněného názvu partie
-  const saveEdit = id => {
-    if (editName.trim() === '') return;
-    handleUpdateBodyPart(id, {BodyPartName: editName});
-    setEditEntryId(null);
-  };
-
-  // Příprava potvrzení mazání dané položky
-  const onDeleteClick = id => {
-    setConfirmDeleteId(id);
-  };
+  const handleSubmit = (e) => { e?.preventDefault(); if (!isValid) return; onAdd({ BodyPartName: newName }); setNewName(''); };
+  const enterEdit = (item) => { setEditEntryId(item.id); setEditName(item.bodyPartName); };
+  const saveEdit = (id) => { if (editName.trim() === '') return; onUpdate(id, { BodyPartName: editName }); setEditEntryId(null); };
 
   return (
-    <div className="container my-4">
-      <h3 className="mb-3">🦵 Tabulka partií</h3>
-
-      <div className="table-responsive">
-        <table className="table table-bordered table-hover align-middle shadow-sm">
-          <thead className="table-dark text-center">
-            <tr>
-              <th>Název svalové partie</th>
-              <th style={{width: '120px'}}>Editovat</th>
-              <th style={{width: '120px'}}>Smazat</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Řádek pro přidání nové partie */}
-            <tr>
-              <td className='bg-secondary-subtle'> 
-                <form onSubmit={handleSubmit}>
-                  <input
-                    type="text"
-                    className="form-control form-control-sm rounded-3"
-                    name="BodyPartName"
-                    value={newBodyPart.BodyPartName}
-                    onChange={handleChange}
-                    placeholder="Např. Ramena"
-                    required
-                  />
-                </form>
-              </td>
-              <td colSpan={2} className="text-center bg-secondary-subtle">
-                <button className="btn btn-outline-success btn-sm" onClick={handleSubmit} disabled={!valid}>
-                  Přidat
-                </button>
-              </td>
-            </tr>
-
-            {/* Hlavička při prázdném seznamu */}
-            {dataParts.length === 0 && (
+    <div className="hw-card mb-4">
+      <div className="hw-card-header">
+        <h5 className="mb-0 fw-bold">🦵 Svalové partie</h5>
+      </div>
+      <div className="p-0">
+        <div className="table-responsive">
+          <table className="table hw-table mb-0">
+            <thead>
               <tr>
-                <td colSpan={3} className="text-center text-muted">
-                  Žádné partie k zobrazení
+                <th className="ps-3">Název</th>
+                <th style={{ width: '100px' }} className="text-center">Editovat</th>
+                <th style={{ width: '100px' }} className="text-center">Smazat</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="hw-add-row">
+                <td className="ps-3">
+                  <form onSubmit={handleSubmit}>
+                    <input type="text" className="form-control form-control-sm" value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Např. Ramena" required />
+                  </form>
+                </td>
+                <td colSpan={2} className="text-center">
+                  <button className="hw-btn hw-btn-success" onClick={handleSubmit} disabled={!isValid}>+ Přidat</button>
                 </td>
               </tr>
-            )}
 
-            {/* Iterace přes seznam partií */}
-            {dataParts.map(item => (
-              <tr key={item.id}>
-                <td>
-                  {editEntryId === item.id ? (
-                    <input
-                      type="text"
-                      className="form-control form-control-sm rounded-3"
-                      value={editName}
-                      onChange={e => setEditName(e.target.value)}
-                      autoFocus
-                    />
-                  ) : (
-                    item.bodyPartName
-                  )}
-                </td>
+              {dataParts.length === 0 && (
+                <tr><td colSpan={3} className="text-center text-muted py-4">Žádné partie k zobrazení</td></tr>
+              )}
 
-                <td className="text-center">
-                  {editEntryId === item.id ? (
-                    <>
-                      <button className="btn btn-outline-success btn-sm me-2" onClick={() => saveEdit(item.id)} title="Uložit změny">
-                        ✅
-                      </button>
-                      <button className="btn btn-outline-secondary btn-sm" onClick={() => setEditEntryId(null)} title="Zrušit editaci">
-                        ❌
-                      </button>
-                    </>
-                  ) : ['Vršek těla', 'Střed těla'].includes(item.bodyPartName) ? (
-                    <button className="btn btn-outline-secondary btn-sm" disabled>
-                      <i className="bi bi-lock-fill"></i> 🔒
-                    </button>
-                  ) : (
-                    <button className="btn btn-outline-secondary btn-sm" onClick={() => enterEdit(item)}>
-                      Edituj
-                    </button>
-                  )}
-                </td>
-
-                <td className="text-center">
-                  {confirmDeleteId === item.id ? (
-                    <>
-                      <button
-                        onClick={() => {
-                          handleDeleteBodyPart(item.id);
-                          setConfirmDeleteId(null);
-                        }}
-                        className="btn btn-outline-danger btn-sm me-2"
-                        title="Potvrdit smazání"
-                      >
-                        🗑️
-                      </button>
-                      <button onClick={() => setConfirmDeleteId(null)} className="btn btn-outline-secondary btn-sm" title="Zrušit">
-                        ❌
-                      </button>
-                    </>
-                  ) : ['Vršek těla', 'Střed těla'].includes(item.bodyPartName) ? (
-                    <button className="btn btn-outline-danger btn-sm" disabled>
-                      <i className="bi bi-lock-fill"></i> 🔒
-                    </button>
-                  ) : (
-                    <button onClick={() => onDeleteClick(item.id)} className="btn btn-outline-danger btn-sm">
-                      Smaž
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+              {dataParts.map((item) => (
+                <tr key={item.id}>
+                  <td className="ps-3">
+                    {editEntryId === item.id ? (
+                      <input type="text" className="form-control form-control-sm" value={editName} onChange={(e) => setEditName(e.target.value)} autoFocus />
+                    ) : item.bodyPartName}
+                  </td>
+                  <td className="text-center">
+                    {editEntryId === item.id ? (
+                      <div className="hw-action-group">
+                        <button className="hw-btn hw-btn-success" onClick={() => saveEdit(item.id)} title="Uložit změny">✅</button>
+                        <button className="hw-btn" onClick={() => setEditEntryId(null)} title="Zrušit editaci">✕</button>
+                      </div>
+                    ) : isLocked(item.bodyPartName) ? (
+                      <span className="hw-locked" title="Chráněná položka – nelze editovat">🔒</span>
+                    ) : (
+                      <button className="hw-btn hw-btn-ghost" onClick={() => enterEdit(item)} title="Editovat položku">✏️</button>
+                    )}
+                  </td>
+                  <td className="text-center">
+                    {confirmDeleteId === item.id ? (
+                      <div className="hw-action-group">
+                        <button className="hw-btn hw-btn-danger" onClick={() => { onDelete(item.id); setConfirmDeleteId(null); }} title="Potvrdit smazání">🗑️</button>
+                        <button className="hw-btn" onClick={() => setConfirmDeleteId(null)} title="Zrušit smazání">✕</button>
+                      </div>
+                    ) : isLocked(item.bodyPartName) ? (
+                      <span className="hw-locked" title="Chráněná položka – nelze smazat">🔒</span>
+                    ) : (
+                      <button className="hw-btn hw-btn-ghost" onClick={() => setConfirmDeleteId(item.id)} title="Smazat položku">🗑️</button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

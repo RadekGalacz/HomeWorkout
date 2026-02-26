@@ -3,7 +3,7 @@ using HomeWorkoutWebApp25.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace HomeWorkoutWebApp25.Services {
-    public class WorkoutPlanService {
+    public class WorkoutPlanService : IWorkoutPlanService {
         private readonly ApplicationDbContext _dbContext;
 
         public WorkoutPlanService(ApplicationDbContext dbContext) {
@@ -16,12 +16,7 @@ namespace HomeWorkoutWebApp25.Services {
                                            .OrderBy(plan => plan.Date)
                                            .ToListAsync();
 
-            var planDtos = new List<WorkoutPlanDto>();
-            foreach (var plan in allPlans) {
-                var dto = ModelToDto(plan);
-                planDtos.Add(dto);
-            }
-            return planDtos;
+            return allPlans.Select(ModelToDto);
         }
 
         // Vytvoří nový tréninkový plán
@@ -57,7 +52,7 @@ namespace HomeWorkoutWebApp25.Services {
         }
 
         // Vrátí plán podle ID
-        internal async Task<WorkoutPlanDto?> GetByIdAsync(int id) {
+        public async Task<WorkoutPlanDto?> GetByIdAsync(int id) {
             var plan = await _dbContext.WorkoutPlans.FindAsync(id);
             return plan == null ? null : ModelToDto(plan);
         }

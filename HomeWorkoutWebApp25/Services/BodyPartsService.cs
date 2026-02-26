@@ -3,7 +3,7 @@ using HomeWorkoutWebApp25.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace HomeWorkoutWebApp25.Services {
-    public class BodyPartsService {
+    public class BodyPartsService : IBodyPartsService {
         private readonly ApplicationDbContext _dbContext;
 
         public BodyPartsService(ApplicationDbContext dbContext) {
@@ -51,7 +51,7 @@ namespace HomeWorkoutWebApp25.Services {
         }
 
         // Vrátí tělesnou partii podle ID
-        internal async Task<BodyPartDto> GetByIdAsync(int id) {
+        public async Task<BodyPartDto> GetByIdAsync(int id) {
             var bodyPartToEdit = await _dbContext.BodyParts.FindAsync(id);
             if (bodyPartToEdit == null) {
                 return null;

@@ -1,6 +1,12 @@
-import {BrowserRouter as Router, Routes, Route, NavLink, Navigate, useNavigate} from 'react-router-dom';
-import {useEffect, useState} from 'react';
-import axios from 'axios';
+/**
+ * App – Hlavní komponenta aplikace. Obsahuje navbar, routing a správu dat.
+ * Načítá všechna data po přihlášení a předává je child komponentám.
+ */
+import { BrowserRouter as Router, Routes, Route, NavLink, Navigate, Link } from 'react-router-dom';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { AuthProvider, useAuth } from './AuthContext';
+import { bodyPartApi, exerciseApi, planApi, planExerciseApi, userApi, roleApi } from './api';
+import ProtectedRoute from './Components/ProtectedRoute';
 import ExerciseAdmin from './Components/Exercise/ExerciseAdmin';
 import BodyPartAdmin from './Components/BodyPart/BodyPartAdmin';
 import WorkoutPlan from './Components/Plan/WorkoutPlan';
@@ -9,357 +15,182 @@ import UserAdmin from './Components/User/UserAdmin';
 import Roles from './Components/Roles/Roles';
 import Login from './Components/Auth/Login';
 
-// Nastavení Axios pro cookies (nutné pro autentizaci)
-axios.defaults.withCredentials = true;
-
 function AppContent() {
-  // Stavy entit
+  const { user, role, authChecked, handleLogout } = useAuth();
+
   const [bodyParts, setBodyParts] = useState([]);
   const [exercises, setExercises] = useState([]);
   const [plans, setPlans] = useState([]);
   const [planExercises, setPlanExercises] = useState([]);
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
-
-  // Autentizace
-  const [user, setUser] = useState(null);
-  const [role, setRole] = useState(null);
-  const [authChecked, setAuthChecked] = useState(false);
-
-  // Welcome modal
   const [showHelp, setShowHelp] = useState(() => localStorage.getItem('hasSeenWelcomeModal') !== 'true');
 
-  const navigate = useNavigate();
-  const baseUrl1 = 'https://localhost:44341/';
-  const baseUrl = 'https://homeworkoutwebapp.runasp.net/';
-
-  // Výchozí stavy entit
-  const [newBodyPart, setNewBodyPart] = useState({BodyPartName: ''});
-  const [newExercise, setNewExercise] = useState({ExerciseName: '', ExerciseDescription: '', Difficulty: '', BodyPartId: ''});
-  const [newPlan, setNewPlan] = useState({Name: '', Description: '', Date: ''});
-  const [newPlanExercise, setNewPlanExercise] = useState({sets: '', reps: '', workoutPlanId: null, exerciseId: null, checked: null});
-  const [newUser, setNewUser] = useState({Name: '', Email: '', Password: ''});
-  const [newRole, setNewRole] = useState({RoleName: ''});
-
-  // Zpracování chyb Axios
-  const handleError = error => {
-    const msg = error.response?.data?.errors
-      ? Object.values(error.response.data.errors)[0]
-      : error.response?.data?.message || error.message || 'Neznámá chyba';
-
-    if (error.response?.status === 404 && error.config.url.includes('AccessDenied')) return;
-    if (error.response?.status === 405 && error.config.url.includes('Account/Login')) return;
-    alert(`Chyba: ${msg}`);
-    console.error(`Chyba: ${msg}`);
-  };
-
-  // Autentizace
-  const checkAuth = async () => {
-    try {
-      const {data} = await axios.get(`${baseUrl}Account/UserInfo`);
-      setUser(data.userName || null);
-      setRole(data.role?.toLowerCase() || null);
-    } catch (error) {
-      setUser(null);
-      setRole(null);
-      console.error('Chyba autentizace:', error);
-    } finally {
-      setAuthChecked(true);
-    }
-  };
-
-  // Funkce pro načtení dat
-  const fetchBodyParts = () =>
-    axios
-      .get(`${baseUrl}BodyParts`)
-      .then(res => setBodyParts(res.data))
-      .catch(handleError);
-  const fetchExercises = () =>
-    axios
-      .get(`${baseUrl}exercises`)
-      .then(res => setExercises(res.data))
-      .catch(handleError);
-  const fetchPlans = () =>
-    axios
-      .get(`${baseUrl}WorkoutPlan`)
-      .then(res => setPlans(res.data))
-      .catch(handleError);
-  const fetchPlanExercises = () =>
-    axios
-      .get(`${baseUrl}WorkoutExercise`)
-      .then(res => setPlanExercises(res.data))
-      .catch(handleError);
-  const fetchUsers = () =>
-    axios
-      .get(`${baseUrl}Users`)
-      .then(res => setUsers(res.data))
-      .catch(handleError);
-  const fetchRoles = () =>
-    axios
-      .get(`${baseUrl}Roles`)
-      .then(res => setRoles(res.data.roles))
-      .catch(handleError);
-
-  // Funkce pro vkládání
-  const addExercise = () => axios.post(`${baseUrl}exercises`, newExercise).then(fetchExercises).catch(handleError);
-  const addPlan = data => axios.post(`${baseUrl}WorkoutPlan`, data).then(fetchPlans).catch(handleError);
-  const addBodyPart = () => axios.post(`${baseUrl}BodyParts`, newBodyPart).then(fetchBodyParts).catch(handleError);
-  const addPlanExercise = () => axios.post(`${baseUrl}WorkoutExercise`, newPlanExercise).then(fetchPlanExercises).catch(handleError);
-  const addUser = () =>
-    axios
-      .post(`${baseUrl}Users/Create`, newUser)
-      .then(() => {
-        fetchUsers();
-        setNewUser({Name: '', Email: '', Password: ''});
-      })
-      .catch(handleError);
-  const addRole = () =>
-    axios
-      .post(`${baseUrl}Roles/create`, newRole.RoleName, {headers: {'Content-Type': 'application/json'}})
-      .then(() => {
-        fetchRoles();
-        setNewRole({RoleName: ''});
-      })
-      .catch(handleError);
-
-  // Funkce pro aktualizaci
-  const updateExercise = (id, data) => axios.put(`${baseUrl}exercises/${id}`, data).then(fetchExercises).catch(handleError);
-  const updatePlan = (id, data) => axios.put(`${baseUrl}WorkoutPlan/${id}`, data).then(fetchPlans).catch(handleError);
-  const updateBodyPart = (id, data) => axios.put(`${baseUrl}BodyParts/${id}`, data).then(fetchBodyParts).catch(handleError);
-  const updatePlanExercise = (id, data) => axios.put(`${baseUrl}WorkoutExercise/${id}`, data).then(fetchPlanExercises).catch(handleError);
-  const updateUser = (id, data) => axios.put(`${baseUrl}Users/${id}`, data).then(fetchUsers).catch(handleError);
-  const updateRoleMembers = (roleId, roleName, addIds, deleteIds) =>
-    axios
-      .post(`${baseUrl}Roles`, {RoleId: roleId, RoleName: roleName, AddIds: addIds, DeleteIds: deleteIds})
-      .then(() => {
-        fetchRoles();
-        fetchUsers();
-      })
-      .catch(handleError);
-
-  // Funkce pro mazání
-  const deleteExercise = id => axios.delete(`${baseUrl}exercises/${id}`).then(fetchExercises).catch(handleError);
-  const deletePlan = id => axios.delete(`${baseUrl}WorkoutPlan/${id}`).then(fetchPlans).catch(handleError);
-  const deleteBodyPart = id => axios.delete(`${baseUrl}BodyParts/${id}`).then(fetchBodyParts).catch(handleError);
-  const deletePlanExercise = id => axios.delete(`${baseUrl}WorkoutExercise/${id}`).then(fetchPlanExercises).catch(handleError);
-  const deleteUser = id => axios.delete(`${baseUrl}Users/${id}`).then(fetchUsers).catch(handleError);
-  const deleteRole = id => axios.delete(`${baseUrl}Roles/${id}`).then(fetchRoles).catch(handleError);
-
-  // Přihlášení a odhlášení
-  const handleLogin = async user => {
-    if (typeof user === 'object' && user !== null) {
-      setUser(user.userName || user.username || user.Name || null);
-      setRole((user.role || user.Role || '').toLowerCase());
-      navigate('/');
-    } else {
-      await checkAuth();
-      navigate('/');
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await axios.post(`${baseUrl}Account/Logout`, {}, {withCredentials: true});
-      setUser(null);
-      setRole(null);
-      setAuthChecked(false);
-      navigate('/login');
-    } catch (error) {
-      handleError(error);
-    }
-  };
-
-  // Počáteční kontrola autentizace
-  useEffect(() => {
-    if (!authChecked) checkAuth();
+  const fetchAll = useCallback(async () => {
+    const [bp, ex, pl, pe, us, ro] = await Promise.all([
+      bodyPartApi.getAll(), exerciseApi.getAll(), planApi.getAll(),
+      planExerciseApi.getAll(), userApi.getAll(), roleApi.getAll(),
+    ]);
+    if (Array.isArray(bp)) setBodyParts(bp);
+    if (Array.isArray(ex)) setExercises(ex);
+    if (Array.isArray(pl)) setPlans(pl);
+    if (Array.isArray(pe)) setPlanExercises(pe);
+    if (Array.isArray(us)) setUsers(us);
+    if (Array.isArray(ro)) setRoles(ro);
   }, []);
 
-  // Načítání dat a navigace
-  useEffect(() => {
-    if (!authChecked) return;
-    if (!user && window.location.pathname !== '/login') navigate('/login');
-    else if (user && window.location.pathname === '/login') navigate('/');
-    else if (user) {
-      fetchBodyParts();
-      fetchExercises();
-      fetchPlans();
-      fetchPlanExercises();
-      fetchUsers();
-      fetchRoles();
-    }
-  }, [user, authChecked, navigate]);
+  const refetchBodyParts = useCallback(() => bodyPartApi.getAll().then(d => Array.isArray(d) && setBodyParts(d)), []);
+  const refetchExercises = useCallback(() => exerciseApi.getAll().then(d => Array.isArray(d) && setExercises(d)), []);
+  const refetchPlans = useCallback(() => planApi.getAll().then(d => Array.isArray(d) && setPlans(d)), []);
+  const refetchPlanExercises = useCallback(() => planExerciseApi.getAll().then(d => Array.isArray(d) && setPlanExercises(d)), []);
+  const refetchUsers = useCallback(() => userApi.getAll().then(d => Array.isArray(d) && setUsers(d)), []);
+  const refetchRoles = useCallback(() => roleApi.getAll().then(d => Array.isArray(d) && setRoles(d)), []);
 
-  // Uzavření welcome modalu
+  useEffect(() => {
+    if (authChecked && user) fetchAll();
+  }, [user, authChecked, fetchAll]);
+
   const closeWelcomeModal = () => {
     setShowHelp(false);
     localStorage.setItem('hasSeenWelcomeModal', 'true');
   };
 
+  const navLinkClass = ({ isActive }) =>
+    `nav-link hw-nav-link px-3 py-2 ${isActive ? 'active-link' : 'text-dark'}`;
+
+  // Zavřít hamburger při kliknutí mimo
+  const navRef = useRef(null);
+  useEffect(() => {
+    const handleClickOutside = async (e) => {
+      if (navRef.current && !navRef.current.contains(e.target)) {
+        const collapseEl = navRef.current.querySelector('.navbar-collapse.show');
+        if (collapseEl) {
+          const { Collapse } = await import('bootstrap');
+          const instance = Collapse.getInstance(collapseEl);
+          if (instance) instance.hide();
+        }
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
+  const handleToggle = async () => {
+    const collapseEl = navRef.current?.querySelector('#mainNav');
+    if (collapseEl) {
+      const { Collapse } = await import('bootstrap');
+      const instance = Collapse.getInstance(collapseEl) || new Collapse(collapseEl, { toggle: false });
+      instance.toggle();
+    }
+  };
+
   return (
-    <div className="bg-light min-vh-100 py-4">
-  <WelcomeModal isOpen={showHelp} onClose={closeWelcomeModal} />
-  <header className="container my-4">
-    <div className="p-3 bg-white rounded shadow text-center">
-      <h1 className="h3 fw-bold text-success mb-2">
-        💪 <span className="text-primary">HomeWorkout</span>
-      </h1>
-      <p className="small text-muted mb-3">Aplikace pro správu cviků a plánů.</p>
-      <nav className="d-flex flex-wrap justify-content-center gap-2 p-2">
-        <div className="d-flex justify-content-center">
-          <div className="d-flex flex-wrap justify-content-center align-items-center bg-light border rounded shadow-sm p-2 gap-2">
-            {/* Sekce pro přihlášené uživatele */}
+    <div className="min-vh-100">
+      <WelcomeModal isOpen={showHelp} onClose={closeWelcomeModal} />
+
+      {/* Navbar */}
+      <nav ref={navRef} className="navbar navbar-expand-md hw-navbar shadow-sm sticky-top">
+        <div className="container">
+          <Link to="/" className="navbar-brand mb-0 fs-5 text-decoration-none">
+            💪 HomeWorkout
+          </Link>
+
+          {user && (
+            <button className="navbar-toggler border-0" type="button" onClick={handleToggle}>
+              <span className="navbar-toggler-icon"></span>
+            </button>
+          )}
+
+          <div className="collapse navbar-collapse" id="mainNav">
             {user && (
-              <>
-                <NavLink to="/" className={({isActive}) => `btn btn-sm shadow-sm ${isActive ? 'btn-primary' : 'btn-success'}`}>
-                  🏠 Domů
-                </NavLink>
+              <ul className="navbar-nav me-auto mb-2 mb-md-0 gap-1">
 
                 {role === 'admin' && (
                   <>
-                    <NavLink
-                      to="/edit"
-                      className={({isActive}) => `btn btn-sm shadow-sm ${isActive ? 'btn-primary' : 'btn-outline-secondary'}`}
-                    >
-                      ✍️ Editace cviků
-                    </NavLink>
-
-                    <NavLink
-                      to="/admin"
-                      className={({isActive}) => `btn btn-sm shadow-sm ${isActive ? 'btn-primary' : 'btn-outline-secondary'}`}
-                    >
-                      🛡️ Admin
-                    </NavLink>
+                    <li className="nav-item">
+                      <NavLink to="/edit" className={navLinkClass}>✍️ Cviky</NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink to="/admin" className={navLinkClass}>🛡️ Admin</NavLink>
+                    </li>
                   </>
                 )}
-              </>
+              </ul>
             )}
 
-            {/* Tlačítko Nápověda je viditelné pro všechny, v rámci panelu */}
-            <button className="btn btn-outline-info btn-sm shadow-sm" onClick={() => setShowHelp(true)} title="Nápověda">
-              ❓ Nápověda
-            </button>
+            <div className="d-flex flex-wrap justify-content-center justify-content-md-end align-items-center gap-2 mt-2 mt-md-0">
+              <button className="hw-btn" onClick={() => setShowHelp(true)}>
+                ❓ Nápověda
+              </button>
+              {user && (
+                <div className="d-flex align-items-center gap-2 border-start ps-2">
+                  <span className="hw-badge">
+                    {user} ({role})
+                  </span>
+                  <button className="hw-btn hw-btn-danger" onClick={handleLogout}>
+                    Odhlásit
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </nav>
-      
-      {user && (
-        <div className="d-flex justify-content-center mb-3 mt-3">
-          <div className="d-flex align-items-center bg-secondary text-white shadow-sm rounded px-3 py-2">
-            <i className="bi bi-person-circle me-2"></i>
-            <span className="me-3">
-              {user} ({role})
-            </span>
-            <button className="btn btn-sm btn-light text-danger border-0 px-2 py-1" onClick={handleLogout} title="Odhlásit se">
-              🔓
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  </header>
 
+      {/* Content */}
+      <main className="container py-4">
+        <Routes>
+          <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
 
-      <Routes>
-        <Route path="/login" element={user ? <Navigate to="/" /> : <Login baseUrl={baseUrl} onLoginSuccess={handleLogin} />} />
-        <Route
-          path="/"
-          element={
-            user ? (
-              <section className="container mb-5">
-                <h2 className="text-center mb-4">🔋 Uživatelská sekce</h2>
-                <WorkoutPlan
-                  handleUpdateWorkoutExercises={updatePlanExercise}
-                  exercises={exercises}
-                  workoutPlans={plans}
-                  insertWorkoutPlan={addPlan}
-                  newWorkoutPlan={newPlan}
-                  setNewWorkoutPlan={setNewPlan}
-                  handleUpdateWorkoutPlan={updatePlan}
-                  handleDeleteWorkoutPlan={deletePlan}
-                  setNewWorkoutExercises={setNewPlanExercise}
-                  newWorkoutExercises={newPlanExercise}
-                  workoutExercises={planExercises}
-                  insertWorkoutExercises={addPlanExercise}
-                  handleDeleteWorkoutExercises={deletePlanExercise}
-                  bodyParts={bodyParts}
-                />
-              </section>
-            ) : authChecked ? (
-              <Navigate to="/login" />
-            ) : null
-          }
-        />
-        <Route
-          path="/edit"
-          element={
-            user ? (
-              role === 'admin' ? (
-                <section className="container mb-5">
-                  <h2 className="text-center mb-4">✍️ Editace cviků a partií</h2>
-                  <ExerciseAdmin
-                    newExercise={newExercise}
-                    setNew={setNewExercise}
-                    insertExercise={addExercise}
-                    handleDelete={deleteExercise}
-                    dataExercises={exercises}
-                    handleUpdate={updateExercise}
-                    dataParts={bodyParts}
-                    newBodyPart={newBodyPart}
-                    setNewBodyPart={setNewBodyPart}
-                    insertExerciseBodyPart={addBodyPart}
-                    handleDeleteBodyPart={deleteBodyPart}
-                    handleUpdateBodyPart={updateBodyPart}
-                  />
-                  <BodyPartAdmin
-                    dataParts={bodyParts}
-                    newBodyPart={newBodyPart}
-                    setNewBodyPart={setNewBodyPart}
-                    insertExerciseBodyPart={addBodyPart}
-                    handleDeleteBodyPart={deleteBodyPart}
-                    handleUpdateBodyPart={updateBodyPart}
-                  />
-                </section>
-              ) : (
-                <Navigate to="/" />
-              )
-            ) : authChecked ? (
-              <Navigate to="/login" />
-            ) : null
-          }
-        />
-        <Route
-          path="/admin"
-          element={
-            role === 'admin' ? (
-              <section className="container mb-5">
-                <h2 className="text-center mb-4">🛡️ Administrace</h2>
-                <UserAdmin
-                  users={users}
-                  newUser={newUser}
-                  setNewUser={setNewUser}
-                  insertUser={addUser}
-                  deleteUser={deleteUser}
-                  handleUpdateUser={updateUser}
-                />
-                <Roles
-                  roles={roles}
-                  newRole={newRole}
-                  setNewRole={setNewRole}
-                  insertRole={addRole}
-                  deleteRole={deleteRole}
-                  users={users}
-                  handleUpdateRoleMembers={updateRoleMembers}
-                  baseUrl={baseUrl}
-                />
-              </section>
-            ) : user ? (
-              <Navigate to="/" />
-            ) : authChecked ? (
-              <Navigate to="/login" />
-            ) : null
-          }
-        />
-      </Routes>
+          <Route path="/" element={
+            <ProtectedRoute>
+              <WorkoutPlan
+                exercises={exercises} workoutPlans={plans} workoutExercises={planExercises} bodyParts={bodyParts}
+                onPlanCreate={(data) => planApi.create(data).then(refetchPlans)}
+                onPlanUpdate={(id, data) => planApi.update(id, data).then(refetchPlans)}
+                onPlanDelete={(id) => planApi.delete(id).then(refetchPlans)}
+                onExerciseCreate={(data) => planExerciseApi.create(data).then(refetchPlanExercises)}
+                onExerciseUpdate={(id, data) => planExerciseApi.update(id, data).then(refetchPlanExercises)}
+                onExerciseDelete={(id) => planExerciseApi.delete(id).then(refetchPlanExercises)}
+              />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/edit" element={
+            <ProtectedRoute requireAdmin>
+              <ExerciseAdmin
+                dataExercises={exercises} dataParts={bodyParts}
+                onAdd={(data) => exerciseApi.create(data).then(refetchExercises)}
+                onUpdate={(id, data) => exerciseApi.update(id, data).then(refetchExercises)}
+                onDelete={(id) => exerciseApi.delete(id).then(refetchExercises)}
+              />
+              <BodyPartAdmin
+                dataParts={bodyParts}
+                onAdd={(data) => bodyPartApi.create(data).then(refetchBodyParts)}
+                onUpdate={(id, data) => bodyPartApi.update(id, data).then(refetchBodyParts)}
+                onDelete={(id) => bodyPartApi.delete(id).then(refetchBodyParts)}
+              />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/admin" element={
+            <ProtectedRoute requireAdmin>
+              <UserAdmin
+                users={users}
+                onAdd={(data) => userApi.create(data).then(refetchUsers)}
+                onUpdate={(id, data) => userApi.update(id, data).then(refetchUsers)}
+                onDelete={(id) => userApi.delete(id).then(refetchUsers)}
+              />
+              <Roles
+                roles={roles} users={users}
+                onAdd={(roleName) => roleApi.create(roleName).then(refetchRoles)}
+                onUpdate={(data) => roleApi.update(data).then(() => { refetchRoles(); refetchUsers(); })}
+                onDelete={(id) => roleApi.delete(id).then(refetchRoles)}
+              />
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </main>
     </div>
   );
 }
@@ -367,7 +198,9 @@ function AppContent() {
 function App() {
   return (
     <Router>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </Router>
   );
 }

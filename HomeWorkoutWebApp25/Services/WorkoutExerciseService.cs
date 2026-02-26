@@ -1,10 +1,9 @@
-﻿using HomeWorkoutWebApp25;
-using HomeWorkoutWebApp25.DTO;
+﻿using HomeWorkoutWebApp25.DTO;
 using HomeWorkoutWebApp25.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace HomeWorkoutWebApp25.Services {
-    public class WorkoutExerciseService {
+    public class WorkoutExerciseService : IWorkoutExerciseService {
         private readonly ApplicationDbContext _dbContext;
 
         public WorkoutExerciseService(ApplicationDbContext dbContext) {
@@ -14,7 +13,7 @@ namespace HomeWorkoutWebApp25.Services {
         // Získá všechny WorkoutExercise záznamy
         public async Task<IEnumerable<WorkoutExerciseDto>> GetAllAsync() {
             var allExercises = await _dbContext.WorkoutExercises.OrderBy(ex => ex.Id).ToListAsync();
-            return allExercises.Select(ex => ModelToDto(ex));
+            return allExercises.Select(ModelToDto);
         }
 
         // Vytvoří nový WorkoutExercise záznam
@@ -50,7 +49,7 @@ namespace HomeWorkoutWebApp25.Services {
         }
 
         // Vrátí WorkoutExercise podle ID
-        internal async Task<WorkoutExerciseDto?> GetByIdAsync(int id) {
+        public async Task<WorkoutExerciseDto?> GetByIdAsync(int id) {
             var ex = await _dbContext.WorkoutExercises.FindAsync(id);
             return ex == null ? null : ModelToDto(ex);
         }

@@ -1,0 +1,522 @@
+/* ============================================
+   HomeWorkout — Globální styly
+   Warm orange/cream palette (portfolio styl)
+   ============================================ */
+
+/* ---------- Fonty (lokální) ---------- */
+@font-face {
+  font-family: "Inter";
+  src: url("/Fonts/Inter-VariableFont_opsz,wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- CSS Proměnné ---------- */
+:root {
+  --hw-primary: #e8603a;
+  --hw-primary-hover: #c44a28;
+  --hw-primary-soft: #f4a68a;
+  --hw-primary-light: #fdf6f3;
+  --hw-primary-box: #f5d4c6;
+  --hw-card-bg: linear-gradient(to top, rgba(255, 244, 237, 0.55) 0%, #FFFFFF 100%);
+  --hw-card-border: rgba(215, 190, 170, 0.7);
+  --hw-text: rgb(45, 45, 50);
+  --hw-text-muted: #8a8a8f;
+  --hw-radius-sm: 12px;
+  --hw-radius-md: 16px;
+  --hw-radius-lg: 20px;
+  --hw-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  --hw-shadow-hover: 0 4px 16px rgba(232, 96, 58, 0.1);
+  --hw-bg: #f9f9f8;
+}
+
+/* ---------- Base ---------- */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  color: var(--hw-text);
+  background-color: var(--hw-bg);
+}
+
+body, html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Selection highlight */
+::selection {
+  background: var(--hw-primary-box);
+  color: var(--hw-text);
+}
+
+/* ---------- Nadpisy ---------- */
+h1, h2 {
+  color: #2c3e50;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h3, h4, h6 {
+  color: rgb(56, 52, 60);
+  font-weight: 600;
+}
+
+h5 {
+  color: rgb(116, 114, 121);
+  font-weight: 600;
+}
+
+p {
+  color: rgb(45, 45, 50);
+  font-size: 0.97rem;
+  line-height: 1.7;
+}
+
+/* Navbar brand */
+.hw-navbar .navbar-brand {
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.hw-navbar .navbar-brand:hover {
+  opacity: 0.8;
+}
+
+/* ---------- Karty (shared) ---------- */
+.hw-card {
+  background: var(--hw-card-bg);
+  border: 1.5px solid var(--hw-card-border);
+  border-radius: var(--hw-radius-lg);
+  box-shadow: var(--hw-shadow);
+  transition: box-shadow 0.25s ease;
+}
+
+.hw-card:hover {
+  box-shadow: var(--hw-shadow-hover);
+}
+
+.hw-card-header {
+  background: transparent;
+  border-bottom: 1px solid rgba(232, 96, 58, 0.08);
+  padding: 0.85rem 1.25rem;
+}
+
+/* ---------- Tlačítka (shared) ---------- */
+.hw-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  color: var(--hw-primary);
+  border: 1px solid #d4d4d4;
+  border-radius: var(--hw-radius-sm);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  padding: 0.35rem 0.85rem;
+  transition: background-color 0.18s ease, color 0.18s ease,
+    border-color 0.18s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  text-decoration: none;
+  line-height: 1.4;
+}
+
+.hw-btn:hover {
+  background: var(--hw-primary);
+  color: #fff;
+  border-color: var(--hw-primary);
+  box-shadow: 0 3px 10px rgba(232, 96, 58, 0.18);
+  transform: translateY(-1px);
+}
+
+.hw-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.hw-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(232, 96, 58, 0.15), 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.hw-btn:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+  transform: none;
+}
+
+.hw-btn-success {
+  color: #2d8a56;
+  border-color: #2d8a56;
+}
+.hw-btn-success:hover {
+  background: #2d8a56;
+  color: #fff;
+  border-color: #2d8a56;
+  box-shadow: 0 3px 10px rgba(45, 138, 86, 0.2);
+}
+
+.hw-btn-danger {
+  color: #c9302c;
+  border-color: #c9302c;
+}
+.hw-btn-danger:hover {
+  background: #c9302c;
+  color: #fff;
+  border-color: #c9302c;
+  box-shadow: 0 3px 10px rgba(201, 48, 44, 0.2);
+}
+
+.hw-btn-filled {
+  background: var(--hw-primary);
+  color: #fff;
+  border-color: var(--hw-primary);
+}
+.hw-btn-filled:hover {
+  background: var(--hw-primary-hover);
+  border-color: var(--hw-primary-hover);
+  box-shadow: 0 3px 10px rgba(232, 96, 58, 0.2);
+}
+
+/* Ghost – ikonky */
+.hw-btn-ghost {
+  background: transparent;
+  border: none;
+  padding: 0.3rem 0.5rem;
+  box-shadow: none;
+  color: var(--hw-text-muted);
+}
+.hw-btn-ghost:hover {
+  background: rgba(232, 96, 58, 0.06);
+  color: var(--hw-primary);
+  border: none;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ---------- Action Group ---------- */
+.hw-action-group {
+  display: inline-flex;
+  gap: 2px;
+  background: var(--hw-primary-light);
+  border: 1px solid var(--hw-card-border);
+  border-radius: var(--hw-radius-sm);
+  padding: 3px;
+}
+
+.hw-action-group .hw-btn {
+  border-radius: 8px;
+  padding: 0.25rem 0.55rem;
+  box-shadow: none;
+  font-size: 0.8rem;
+}
+
+/* ---------- Zamčená položka ---------- */
+.hw-locked {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  cursor: not-allowed;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.hw-locked:hover {
+  color: #c9302c;
+}
+
+
+/* ---------- Oddělovač ---------- */
+.hw-divider {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--hw-primary-box), transparent);
+  margin: 0.4rem 0;
+}
+
+.hw-exercise-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 2%, rgba(232, 96, 58, 0.25) 20%, rgba(232, 96, 58, 0.25) 80%, transparent 98%);
+  margin: 0.2rem 0;
+}
+
+/* ---------- Tabulky ---------- */
+.hw-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1.5px solid var(--hw-card-border);
+  border-radius: var(--hw-radius-sm);
+  overflow: hidden;
+}
+
+.hw-table thead th {
+  background: var(--hw-primary-light);
+  color: var(--hw-text);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--hw-primary-box);
+  padding: 0.65rem 0.75rem;
+}
+
+.hw-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.hw-table tbody tr:hover {
+  background-color: rgba(232, 96, 58, 0.03);
+}
+
+.hw-table tbody td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  vertical-align: middle;
+}
+
+.hw-table .hw-add-row td {
+  background: rgba(255, 244, 237, 0.3);
+}
+
+/* ---------- Navbar ---------- */
+.hw-navbar {
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+  border: none;
+  border-bottom: none !important;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.hw-navbar .navbar-brand {
+  font-weight: 700;
+  color: var(--hw-primary) !important;
+}
+
+/* Toggler (hamburger) */
+.hw-navbar .navbar-toggler {
+  background-color: white;
+  border: 2px solid var(--hw-primary-box);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  padding: 5px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.hw-navbar .navbar-toggler:hover,
+.hw-navbar .navbar-toggler:focus {
+  background-color: var(--hw-primary-light);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* Nav links */
+.hw-nav-link {
+  padding: 6px 14px !important;
+  color: var(--hw-text) !important;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 30px;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hw-nav-link:hover:not(.active-link) {
+  box-shadow: inset 0 -2px 0 var(--hw-primary);
+}
+
+.hw-nav-link.active-link {
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.2) 40%,
+      rgba(0, 0, 0, 0.04) 100%
+    ),
+    rgba(70, 81, 101, 0.1);
+  font-weight: bold;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(6px);
+  color: var(--hw-text) !important;
+}
+
+/* Collapse menu – bez bílého pruhu */
+.hw-navbar .navbar-collapse {
+  background: transparent;
+}
+
+@media (max-width: 767.98px) {
+  .hw-navbar .navbar-collapse.show,
+  .hw-navbar .navbar-collapse.collapsing {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 0 0 var(--hw-radius-md) var(--hw-radius-md);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 0.5rem;
+  }
+}
+
+/* ---------- Badge ---------- */
+.hw-badge {
+  background: #fef0ea;
+  color: var(--hw-text);
+  border: 1px solid var(--hw-primary-soft);
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hw-badge-active {
+  background: var(--hw-primary-box);
+  border-color: var(--hw-primary);
+  color: var(--hw-primary-hover);
+  font-weight: 700;
+}
+
+/* ---------- Modal override ---------- */
+.hw-modal .modal-content {
+  border: none;
+  border-radius: var(--hw-radius-lg);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+}
+
+.hw-modal .modal-header {
+  background: #fbe8df;
+  border: none;
+  border-bottom: 2px solid var(--hw-primary-soft);
+  border-radius: var(--hw-radius-lg) var(--hw-radius-lg) 0 0;
+  color: var(--hw-text);
+}
+
+.hw-modal .modal-header .btn-close-white {
+  filter: none;
+}
+
+/* Login header */
+.hw-login-header {
+  background: #fbe8df;
+  border-bottom: 2px solid var(--hw-primary-soft);
+  padding: 1.1rem 1.25rem;
+  color: var(--hw-text);
+}
+
+/* ---------- React-Select oranžový theme ---------- */
+.react-select__control {
+  border-color: #d4d4d4 !important;
+  border-radius: var(--hw-radius-sm) !important;
+  min-height: 34px !important;
+  box-shadow: none !important;
+  transition: border-color 0.18s ease, box-shadow 0.2s ease !important;
+}
+
+.react-select__control:hover {
+  border-color: var(--hw-primary-box) !important;
+}
+
+.react-select__control--is-focused {
+  border-color: var(--hw-primary) !important;
+  box-shadow: 0 0 0 3px rgba(232, 96, 58, 0.1) !important;
+}
+
+.react-select__option--is-focused {
+  background-color: rgba(232, 96, 58, 0.06) !important;
+}
+
+.react-select__option--is-selected {
+  background-color: var(--hw-primary) !important;
+  color: #fff !important;
+}
+
+.react-select__indicator-separator {
+  background-color: var(--hw-card-border) !important;
+}
+
+.react-select__dropdown-indicator {
+  color: var(--hw-primary-soft) !important;
+}
+
+.react-select__dropdown-indicator:hover {
+  color: var(--hw-primary) !important;
+}
+
+.react-select__multi-value {
+  background-color: var(--hw-primary-light) !important;
+  border-radius: 8px !important;
+}
+
+.react-select__multi-value__label {
+  color: var(--hw-text) !important;
+}
+
+.react-select__multi-value__remove:hover {
+  background-color: var(--hw-primary) !important;
+  color: #fff !important;
+}
+
+/* ---------- Form controls override ---------- */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--hw-primary-box);
+  box-shadow: 0 0 0 3px rgba(232, 96, 58, 0.1);
+}
+
+.form-control,
+.form-select {
+  border-radius: var(--hw-radius-sm);
+  transition: border-color 0.18s ease, box-shadow 0.2s ease;
+}
+
+.form-control::placeholder {
+  color: #c4c4c4;
+  font-weight: 400;
+}
+
+/* ---------- List group (modaly) ---------- */
+.list-group-item {
+  border-color: rgba(0, 0, 0, 0.04);
+  transition: background-color 0.15s ease;
+}
+
+.list-group-item:hover {
+  background-color: rgba(232, 96, 58, 0.02);
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--hw-primary-box);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--hw-primary-soft);
+}
+
+/* ---------- Plan card header ---------- */
+.hw-plan-header {
+  background: linear-gradient(135deg, #fbe8df 0%, #f5d4c6 100%);
+  border-bottom: 2px solid var(--hw-primary-soft);
+  border-radius: var(--hw-radius-lg) var(--hw-radius-lg) 0 0;
+  padding: 0.75rem 1rem;
+  margin: -1px -1px 0 -1px;
+}

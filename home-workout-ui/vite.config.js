@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  base: "/projects/home-workout/", //Pro build na můj web
+  //base: "/projects/home-workout/", //Pro build na můj web
   plugins: [react()],
   server: {
     proxy: {

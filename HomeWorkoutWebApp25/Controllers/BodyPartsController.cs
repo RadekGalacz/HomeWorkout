@@ -1,9 +1,7 @@
 ﻿using HomeWorkoutWebApp25.DTO;
-using HomeWorkoutWebApp25.Migrations;
 using HomeWorkoutWebApp25.Models;
 using HomeWorkoutWebApp25.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 
 namespace HomeWorkoutWebApp25.Controllers {
@@ -11,13 +9,11 @@ namespace HomeWorkoutWebApp25.Controllers {
     [Route("[controller]")]
     [Authorize]
     public class BodyPartsController : ControllerBase {
-        private readonly BodyPartsService _bodyPartsService;
-        private readonly IConfiguration _configuration;
+        private readonly IBodyPartsService _bodyPartsService;
         private readonly List<string> _protectedBodyPartsNames;
 
         // Konstruktor controlleru, načítá službu a chráněné názvy partií z konfigurace
-        public BodyPartsController(BodyPartsService bodyPartsService, IConfiguration configuration) {
-            _configuration = configuration;
+        public BodyPartsController(IBodyPartsService bodyPartsService, IConfiguration configuration) {
             _bodyPartsService = bodyPartsService;
 
             // Načtení seznamu chráněných partií z appsettings.json

@@ -1,19 +1,17 @@
 ﻿using HomeWorkoutWebApp25.DTO;
+using HomeWorkoutWebApp25.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace HomeWorkoutWebApp25.Controllers {
     [ApiController]
     [Route("[controller]")]
     [Authorize]
     public class ExercisesController : ControllerBase {
-        private readonly ExerciseService _exerciseService;
-        private readonly IConfiguration _configuration;
+        private readonly IExerciseService _exerciseService;
         private readonly List<string> _protectedExercisesNames;
 
-        public ExercisesController(ExerciseService exerciseService, IConfiguration configuration) {
-            _configuration = configuration;
+        public ExercisesController(IExerciseService exerciseService, IConfiguration configuration) {
             _exerciseService = exerciseService;
             _protectedExercisesNames = configuration.GetSection("ProtectedExercises").Get<List<string>>() ?? new List<string>();
         }

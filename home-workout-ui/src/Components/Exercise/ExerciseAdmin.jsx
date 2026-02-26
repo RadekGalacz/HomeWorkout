@@ -1,300 +1,112 @@
-import React, {useState, useEffect} from 'react';
+/**
+ * ExerciseAdmin – CRUD tabulka cviků s obtížností (slider) a vazbou na partii.
+ * Zamčené cviky (LOCKED_EXERCISES) nelze editovat ani mazat.
+ */
+import { useState, useMemo } from 'react';
 import Select from 'react-select';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
+import { STARS, LOCKED_EXERCISES } from '../../constants';
 
-function ExerciseAdmin({newExercise, setNew, insertExercise, dataParts, dataExercises, handleDelete, handleUpdate}) {
-  const [isValid, setIsValid] = useState(false);
+function ExerciseAdmin({ dataParts, dataExercises, onAdd, onUpdate, onDelete }) {
+  const [newExercise, setNewExercise] = useState({ ExerciseName: '', ExerciseDescription: '', Difficulty: 1, BodyPartId: null });
   const [editEntryId, setEditEntryId] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
-  const [editData, setEditData] = useState({
-    ExerciseName: '',
-    ExerciseDescription: '',
-    Difficulty: '',
-    BodyPartId: null
-  });
-  const [stars] = useState(['⭐', '⭐⭐', '⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐⭐⭐'])
+  const [editData, setEditData] = useState({ ExerciseName: '', ExerciseDescription: '', Difficulty: '', BodyPartId: null });
 
-  useEffect(() => {
-    const valid =
-      newExercise.ExerciseName.trim() !== '' &&
-      newExercise.ExerciseDescription.trim() !== '' &&
-      newExercise.Difficulty !== '' &&
-      newExercise.BodyPartId != null;
-    setIsValid(valid);
-  }, [newExercise]);
+  const isValid = useMemo(() => newExercise.ExerciseName.trim() !== '' && newExercise.ExerciseDescription.trim() !== '' && newExercise.Difficulty !== '' && newExercise.BodyPartId != null, [newExercise]);
+  const options = dataParts.map((bp) => ({ value: bp.id, label: bp.bodyPartName }));
+  const isLocked = (name) => LOCKED_EXERCISES.includes(name);
 
-  // Select - options do selectu
-  const options = dataParts.map(bodyPart => ({
-    value: bodyPart.id,
-    label: bodyPart.bodyPartName
-  }));
+  const handleNewChange = (e) => { const { name, value } = e.target; setNewExercise((prev) => ({ ...prev, [name]: value })); };
+  const handleNewSelect = (opt) => setNewExercise((prev) => ({ ...prev, BodyPartId: opt ? opt.value : null }));
+  const handleNewSubmit = (e) => { e?.preventDefault(); onAdd(newExercise); setNewExercise({ ExerciseName: '', ExerciseDescription: '', Difficulty: 1, BodyPartId: null }); };
+  const handleEditChange = (e) => { const { name, value } = e.target; setEditData((prev) => ({ ...prev, [name]: value })); };
+  const startEditing = (item) => { setEditEntryId(item.id); setEditData({ ExerciseName: item.exerciseName, ExerciseDescription: item.exerciseDescription, Difficulty: item.difficulty, BodyPartId: item.bodyPartId }); };
+  const handleEditSave = (id) => { onUpdate(id, editData); setEditEntryId(null); };
+  const confirmDelete = (id) => { onDelete(id); setConfirmDeleteId(null); };
 
-  // Změna dat v režimu editace
-  const handleEditChange = e => {
-    const {name, value} = e.target;
-    setEditData(prev => ({...prev, [name]: value}));
-  };
-
-  // Uložení změn při editaci
-  const handleEditSave = id => {
-    handleUpdate(id, editData);
-    setEditEntryId(null);
-  };
-
-  // Změna na potvrzovací režim pro smazání
-  const onDeleteClick = id => setConfirmDeleteId(id);
-
-  // Potvrzení smazání
-  const exerciseDeleteConfirm = id => {
-    handleDelete(id);
-    setConfirmDeleteId(null);
-  };
-
-  // Přepnutí do režimu editace
-  const editEntryIdconfirm = item => {
-    setEditEntryId(item.id);
-    setEditData({
-      ExerciseName: item.exerciseName,
-      ExerciseDescription: item.exerciseDescription,
-      Difficulty: item.difficulty,
-      BodyPartId: item.bodyPartId
-    });
-  };
-
-  // Změna v inputu při přidávání nového cviku
-  const handleNewChange = e => {
-    const {name, value} = e.target;
-    const updated = {...newExercise, [name]: value};
-    setNew(updated);
-  };
-
-  // Změna ve selectu při přidávání nového cviku
-  const handleNewSelect = selectedOption => {
-    const updated = {
-      ...newExercise,
-      BodyPartId: selectedOption ? selectedOption.value : null
-    };
-    setNew(updated);
-  };
-
-  // Odeslání nového cviku
-  const handleNewSubmit = e => {
-    e.preventDefault();
-    insertExercise();
-    setNew({
-      ExerciseName: '',
-      ExerciseDescription: '',
-      Difficulty: '',
-      BodyPartId: null
-    });
-  };
+  const DifficultySlider = ({ value, onChange }) => (
+    <Box display="flex" flexDirection="column" alignItems="center">
+      <Slider value={Number(value) || 1} onChange={(e, val) => onChange(val)} step={1} min={1} max={5} marks size="small" sx={{ width: 100, color: 'var(--hw-primary)' }} />
+      <span style={{ fontSize: '0.9rem' }}>{STARS[(Number(value) || 1) - 1]}</span>
+    </Box>
+  );
 
   return (
-    <div className="container my-4">
-      <h3 className="mb-3">🏋 Tabulka cviků</h3>
-
-      <div className="table-responsive">
-        <table className="table table-bordered table-hover align-middle shadow-sm">
-          <thead className="table-dark text-center">
-            <tr>
-              <th>Partie</th>
-              <th>Název cviku</th>
-              <th>Popis cviku</th>
-              <th>Obtížnost</th>
-              <th style={{width: '110px'}}>Editovat</th>
-              <th style={{width: '110px'}}>Smazat</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Formulář přidání nového cviku jako první řádek tabulky */}
-            <tr>
-              <td className="bg-secondary-subtle">
-                <Select
-                  options={options}
-                  isSearchable
-                  value={options.find(opt => opt.value === newExercise.BodyPartId) || null}
-                  onChange={handleNewSelect}
-                  classNamePrefix="react-select"
-                />
-              </td>
-              <td className="bg-secondary-subtle">
-                <input
-                  type="text"
-                  name="ExerciseName"
-                  value={newExercise.ExerciseName}
-                  onChange={handleNewChange}
-                  className="form-control form-control-sm rounded-3"
-                  placeholder="Např. Kliky"
-                />
-              </td>
-              <td className="bg-secondary-subtle">
-                <input
-                  type="text"
-                  name="ExerciseDescription"
-                  value={newExercise.ExerciseDescription}
-                  onChange={handleNewChange}
-                  className="form-control form-control-sm rounded-3"
-                  placeholder="Např. Prsní svaly, tricepsy"
-                />
-              </td>
-<td className="text-center bg-secondary-subtle">
-  <Box display="flex" flexDirection="column" alignItems="center">
-    <Slider
-      name="Difficulty"
-      value={Number(newExercise.Difficulty) || 1}
-      onChange={(e, newValue) =>
-        setNew(prev => ({ ...prev, Difficulty: newValue }))
-      }
-      step={1}
-      min={1}
-      max={5}
-      marks
-      size="small"
-      sx={{ width: 120 }}
-    />
-    <div style={{ fontSize: '1.2rem', color: '#0d6efd' }}>
-      {stars[(Number(newExercise.Difficulty) || 1) - 1]}
-    </div>
-  </Box>
-</td>
-
-              <td colSpan="2" className="text-center bg-secondary-subtle">
-                <button className="btn btn-outline-success btn-sm" onClick={handleNewSubmit} disabled={!isValid}>
-                  Přidat
-                </button>
-              </td>
-            </tr>
-
-            {/* Pokud nejsou cviky */}
-            {dataExercises.length === 0 && (
-              <tr>
-                <td colSpan={6} className="text-center text-muted">
-                  Žádné cviky k zobrazení
-                </td>
-              </tr>
-            )}
-
-            {/* Seznam existujících cviků */}
-            {dataExercises.map(item => (
-              <tr key={item.id}>
-                <td className="align-middle">
-                  {editEntryId === item.id ? (
-                    <Select
-                      options={options}
-                      isSearchable
-                      value={options.find(opt => opt.value === editData.BodyPartId) || null}
-                      onChange={selectedOption =>
-                        setEditData(prev => ({
-                          ...prev,
-                          BodyPartId: selectedOption ? selectedOption.value : null
-                        }))
-                      }
-                      classNamePrefix="react-select"
-                      autoFocus
-                    />
-                  ) : (
-                    dataParts.find(bp => bp.id === item.bodyPartId)?.bodyPartName || 'Neznámá partie'
-                  )}
-                </td>
-                <td className="align-middle ">
-                  {editEntryId === item.id ? (
-                    <input
-                      type="text"
-                      name="ExerciseName"
-                      value={editData.ExerciseName}
-                      onChange={handleEditChange}
-                      className="form-control form-control-sm rounded-3"
-                    />
-                  ) : (
-                    item.exerciseName
-                  )}
-                </td>
-                <td className="align-middle">
-                  {editEntryId === item.id ? (
-                    <input
-                      type="text"
-                      name="ExerciseDescription"
-                      value={editData.ExerciseDescription}
-                      onChange={handleEditChange}
-                      className="form-control form-control-sm rounded-3"
-                    />
-                  ) : (
-                    item.exerciseDescription
-                  )}
-                </td>
-<td className="align-middle text-center" style={{ minWidth: '160px' }}>
-  {editEntryId === item.id ? (
-    <Box display="flex" flexDirection="column" alignItems="center">
-      <Slider
-        name="Difficulty"
-        value={Number(editData.Difficulty) || 1}
-        onChange={(e, newValue) =>
-          setEditData(prev => ({ ...prev, Difficulty: newValue }))
-        }
-        step={1}
-        min={1}
-        max={5}
-        marks
-        size="small"
-        sx={{ width: 120 }}
-      />
-      <div style={{ fontSize: '1.2rem', color: '#0d6efd' }}>
-        {stars[(Number(editData.Difficulty) || 1) - 1]}
+    <div className="hw-card mb-4">
+      <div className="hw-card-header">
+        <h5 className="mb-0 fw-bold">🏋 Cviky</h5>
       </div>
-    </Box>
-  ) : (
-    <span style={{ fontSize: '1.2rem' }}>{stars[item.difficulty - 1]}</span>
-  )}
-</td>
-                <td className="align-middle text-center">
-                  {editEntryId === item.id ? (
-                    <div className="d-flex justify-content-center gap-2">
-                      <button className="btn btn-outline-success btn-sm" onClick={() => handleEditSave(item.id)} title="Uložit změny">
-                        ✅
-                      </button>
-                      <button className="btn btn-outline-secondary btn-sm" onClick={() => setEditEntryId(null)} title="Zrušit editaci">
-                        ❌
-                      </button>
-                    </div>
-                  ) : ['Shyby na hrazdě'].includes(item.exerciseName) ? (
-                    <button className="btn btn-outline-secondary btn-sm" disabled>
-                      <i className="bi bi-lock-fill"></i> 🔒
-                    </button>
-                  ) : (
-                    <button onClick={() => editEntryIdconfirm(item)} className="btn btn-outline-secondary btn-sm">
-                      Edituj
-                    </button>
-                  )}
-                </td>
-                <td className="align-middle text-center">
-                  {confirmDeleteId === item.id ? (
-                    <div className="d-flex justify-content-center gap-2">
-                      <button
-                        onClick={() => exerciseDeleteConfirm(item.id)}
-                        className="btn btn-outline-danger btn-sm"
-                        title="Potvrdit smazání"
-                      >
-                        🗑️
-                      </button>
-                      <button onClick={() => setConfirmDeleteId(null)} className="btn btn-outline-secondary btn-sm" title="Zrušit smazání">
-                        ❌
-                      </button>
-                    </div>
-                  ) : ['Shyby na hrazdě'].includes(item.exerciseName) ? (
-                    <button className="btn btn-outline-danger btn-sm" disabled>
-                      <i className="bi bi-lock-fill"></i> 🔒
-                    </button>
-                  ) : (
-                    <button onClick={() => onDeleteClick(item.id)} className="btn btn-outline-danger btn-sm">
-                      Smaž
-                    </button>
-                  )}
-                </td>
+      <div className="p-0">
+        <div className="table-responsive">
+          <table className="table hw-table mb-0">
+            <thead>
+              <tr>
+                <th className="ps-3">Partie</th>
+                <th>Název</th>
+                <th>Popis</th>
+                <th className="text-center" style={{ width: '130px' }}>Obtížnost</th>
+                <th className="text-center" style={{ width: '90px' }}>Edit</th>
+                <th className="text-center" style={{ width: '90px' }}>Smazat</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <tr className="hw-add-row">
+                <td className="ps-3"><Select options={options} isSearchable value={options.find((o) => o.value === newExercise.BodyPartId) || null} onChange={handleNewSelect} classNamePrefix="react-select" placeholder="Partie..." /></td>
+                <td><input type="text" name="ExerciseName" value={newExercise.ExerciseName} onChange={handleNewChange} className="form-control form-control-sm" placeholder="Název" /></td>
+                <td><input type="text" name="ExerciseDescription" value={newExercise.ExerciseDescription} onChange={handleNewChange} className="form-control form-control-sm" placeholder="Popis" /></td>
+                <td className="text-center"><DifficultySlider value={newExercise.Difficulty} onChange={(val) => setNewExercise((prev) => ({ ...prev, Difficulty: val }))} /></td>
+                <td colSpan="2" className="text-center"><button className="hw-btn hw-btn-success" onClick={handleNewSubmit} disabled={!isValid}>+ Přidat</button></td>
+              </tr>
+
+              {dataExercises.length === 0 && (
+                <tr><td colSpan={6} className="text-center text-muted py-4">Žádné cviky</td></tr>
+              )}
+
+              {dataExercises.map((item) => (
+                <tr key={item.id}>
+                  <td className="ps-3">
+                    {editEntryId === item.id ? (
+                      <Select options={options} isSearchable value={options.find((o) => o.value === editData.BodyPartId) || null} onChange={(opt) => setEditData((prev) => ({ ...prev, BodyPartId: opt ? opt.value : null }))} classNamePrefix="react-select" autoFocus />
+                    ) : dataParts.find((bp) => bp.id === item.bodyPartId)?.bodyPartName || '—'}
+                  </td>
+                  <td>{editEntryId === item.id ? <input type="text" name="ExerciseName" value={editData.ExerciseName} onChange={handleEditChange} className="form-control form-control-sm" /> : item.exerciseName}</td>
+                  <td>{editEntryId === item.id ? <input type="text" name="ExerciseDescription" value={editData.ExerciseDescription} onChange={handleEditChange} className="form-control form-control-sm" /> : <span className="text-muted">{item.exerciseDescription}</span>}</td>
+                  <td className="text-center">
+                    {editEntryId === item.id ? (
+                      <DifficultySlider value={editData.Difficulty} onChange={(val) => setEditData((prev) => ({ ...prev, Difficulty: val }))} />
+                    ) : <span>{STARS[item.difficulty - 1]}</span>}
+                  </td>
+                  <td className="text-center">
+                    {editEntryId === item.id ? (
+                      <div className="hw-action-group">
+                        <button className="hw-btn hw-btn-success" onClick={() => handleEditSave(item.id)} title="Uložit změny">✅</button>
+                        <button className="hw-btn" onClick={() => setEditEntryId(null)} title="Zrušit editaci">✕</button>
+                      </div>
+                    ) : isLocked(item.exerciseName) ? (
+                      <span className="hw-locked" title="Chráněný cvik – nelze editovat">🔒</span>
+                    ) : (
+                      <button className="hw-btn hw-btn-ghost" onClick={() => startEditing(item)} title="Editovat cvik">✏️</button>
+                    )}
+                  </td>
+                  <td className="text-center">
+                    {confirmDeleteId === item.id ? (
+                      <div className="hw-action-group">
+                        <button className="hw-btn hw-btn-danger" onClick={() => confirmDelete(item.id)} title="Potvrdit smazání">🗑️</button>
+                        <button className="hw-btn" onClick={() => setConfirmDeleteId(null)} title="Zrušit smazání">✕</button>
+                      </div>
+                    ) : isLocked(item.exerciseName) ? (
+                      <span className="hw-locked" title="Chráněný cvik – nelze smazat">🔒</span>
+                    ) : (
+                      <button className="hw-btn hw-btn-ghost" onClick={() => setConfirmDeleteId(item.id)} title="Smazat cvik">🗑️</button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
