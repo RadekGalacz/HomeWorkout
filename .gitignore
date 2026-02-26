@@ -88,6 +88,7 @@ secrets.json
 .vscode/
 
 # Local appsettings files that might contain secrets
+appsettings.json
 appsettings.*.json
 
 # Temp folders
